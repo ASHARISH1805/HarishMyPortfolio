@@ -1,0 +1,19 @@
+/* Fix for Achievement Card Button Alignment */
+.achievement-card .card-actions {
+    position: static;
+    /* Override absolute positioning */
+    margin-top: 1.5rem;
+    /* Add spacing from text */
+    justify-content: center;
+    /* Center buttons horizontally */
+    flex-wrap: wrap;
+    /* Allow wrapping */
+    width: 100%;
+}
+
+.achievement-card .achievement-description {
+    flex-grow: 1;
+    /* Make description fill available space */
+    margin-bottom: 0;
+    /* Remove bottom margin since we have margin-top on buttons */
+}

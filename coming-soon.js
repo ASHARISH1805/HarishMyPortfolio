@@ -42,6 +42,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 message = 'Digital certificate verification is being set up. The official certificate will be available for viewing soon. Thank you for your understanding.';
                 icon = 'fas fa-certificate';
                 break;
+            case 'demo-video':
+                title = 'Demo Video Coming Soon';
+                message = 'We are currently recording and editing a comprehensive demo video showcasing this project. The video will be uploaded shortly.';
+                icon = 'fas fa-video';
+                break;
             case 'demo':
                 title = 'Live Demo In Progress';
                 message = 'We are currently deploying the live demonstration of this project. The interactive demo will be accessible shortly.';

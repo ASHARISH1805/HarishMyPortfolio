@@ -46,6 +46,53 @@ window.addEventListener('scroll', () => {
     } else {
         navbar.classList.remove('scrolled');
     }
+
+    // Active link highlighting
+    highlightActiveSection();
+
+    // Back to Top button visibility
+    toggleBackToTop();
+});
+
+// ===================================
+// Active Section Highlighting
+// ===================================
+function highlightActiveSection() {
+    const sections = document.querySelectorAll('section');
+    const scrollY = window.pageYOffset;
+
+    sections.forEach(current => {
+        const sectionHeight = current.offsetHeight;
+        const sectionTop = current.offsetTop - 100; // Offset for fixed nav
+        const sectionId = current.getAttribute('id');
+
+        if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
+            document.querySelector('.nav-menu a[href*=' + sectionId + ']').classList.add('active');
+        } else {
+            const navLink = document.querySelector('.nav-menu a[href*=' + sectionId + ']');
+            if (navLink) navLink.classList.remove('active');
+        }
+    });
+}
+
+// ===================================
+// Back to Top Button
+// ===================================
+const backToTopBtn = document.getElementById('backToTop');
+
+function toggleBackToTop() {
+    if (window.scrollY > 500) {
+        backToTopBtn.classList.add('visible');
+    } else {
+        backToTopBtn.classList.remove('visible');
+    }
+}
+
+backToTopBtn.addEventListener('click', () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
 });
 
 // Mobile menu toggle

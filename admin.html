@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Admin Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
+    <style>
+        body {
+            padding: 2rem;
+            background: #f4f4f9;
+            color: #333;
+        }
+
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 1rem;
+        }
+
+        .tab {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .tab.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .section-content {
+            display: none;
+        }
+
+        .section-content.active {
+            display: block;
+        }
+
+        .item-list {
+            margin-top: 1rem;
+        }
+
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            background: #fff;
+            cursor: grab;
+            transition: background 0.2s;
+        }
+
+        .item-row:hover {
+            background: #f0f0f0;
+        }
+
+        .item-row.sortable-ghost {
+            background: #e0e0e0;
+            opacity: 0.5;
+        }
+
+        .item-row:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: white;
+            margin-left: 0.5rem;
+        }
+
+        .btn-edit {
+            background: #3498db;
+        }
+
+        .btn-delete {
+            background: #e74c3c;
+        }
+
+        .btn-add {
+            background: #2ecc71;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .form-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 500px;
+            max-width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .close-modal {
+            float: right;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="admin-container">
+        <h1><i class="fas fa-user-shield"></i> Portfolio Admin Panel</h1>
+
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('skills')">Skills</div>
+            <div class="tab" onclick="switchTab('projects')">Projects</div>
+            <div class="tab" onclick="switchTab('internships')">Internships</div>
+            <div class="tab" onclick="switchTab('certifications')">Certifications</div>
+            <div class="tab" onclick="switchTab('achievements')">Achievements</div>
+        </div>
+
+        <!-- Skills Section -->
+        <div id="skills" class="section-content active">
+            <button class="btn btn-add" onclick="openModal('skills')"><i class="fas fa-plus"></i> Add New Skill</button>
+            <div id="skills-list" class="item-list">Loading...</div>
+        </div>
+
+        <!-- Projects Section -->
+        <div id="projects" class="section-content">
+            <button class="btn btn-add" onclick="openModal('projects')"><i class="fas fa-plus"></i> Add New
+                Project</button>
+            <div id="projects-list" class="item-list">Loading...</div>
+        </div>
+
+        <!-- Internships Section -->
+        <div id="internships" class="section-content">
+            <button class="btn btn-add" onclick="openModal('internships')"><i class="fas fa-plus"></i> Add New
+                Internship</button>
+            <div id="internships-list" class="item-list">Loading...</div>
+        </div>
+
+        <!-- Certifications Section -->
+        <div id="certifications" class="section-content">
+            <button class="btn btn-add" onclick="openModal('certifications')"><i class="fas fa-plus"></i> Add New
+                Certification</button>
+            <div id="certifications-list" class="item-list">Loading...</div>
+        </div>
+
+        <!-- Achievements Section -->
+        <div id="achievements" class="section-content">
+            <button class="btn btn-add" onclick="openModal('achievements')"><i class="fas fa-plus"></i> Add New
+                Achievement</button>
+            <div id="achievements-list" class="item-list">Loading...</div>
+        </div>
+
+    </div>
+
+    <!-- Generic Form Modal -->
+    <div id="formModal" class="form-modal">
+        <div class="form-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">Add Item</h2>
+            <form id="adminForm">
+                <input type="hidden" id="itemId">
+                <input type="hidden" id="itemType">
+                <div class="form-group">
+                    <label>Visible on Website?</label>
+                    <div style="display:flex; align-items:center; gap:10px; margin-top:5px">
+                        <input type="checkbox" id="isVisible" name="is_visible" value="true" checked
+                            style="width:20px; height:20px;">
+                        <span>Yes, show this item</span>
+                    </div>
+                </div>
+                <div id="formFields"></div>
+                <button type="submit" class="btn btn-add" style="width: 100%; margin-top: 1rem;">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+
+</html>
