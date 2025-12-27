@@ -4,7 +4,7 @@
   "description": "Professional AI & Data Science Portfolio",
   "main": "index.html",
   "scripts": {
-    "start": "node server.js"
+    "start": "node deploy_db.js && node server.js"
   },
   "keywords": [
     "portfolio",
