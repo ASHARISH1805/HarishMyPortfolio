@@ -219,7 +219,11 @@
                     </div>
                 </div>
                 <div id="formFields"></div>
-                <button type="submit" class="btn btn-add" style="width: 100%; margin-top: 1rem;">Save</button>
+                <div style="display:flex; gap:10px; margin-top: 1rem;">
+                    <button type="submit" class="btn btn-add" style="flex:1;">Save</button>
+                    <button type="button" class="btn btn-delete" style="flex:1; background:#95a5a6;"
+                        onclick="closeModal()">Cancel</button>
+                </div>
             </form>
         </div>
     </div>

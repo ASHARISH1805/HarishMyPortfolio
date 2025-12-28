@@ -22,9 +22,6 @@ function setupCertModal() {
         <div class="cert-modal-content">
             <span class="close-modal" onclick="document.getElementById('certModal').style.display='none'">&times;</span>
             <div id="certContainer" style="margin-top:20px;"></div>
-            <a id="downloadBtn" href="#" download class="download-btn">
-                <i class="fas fa-download"></i> Download Certificate
-            </a>
         </div>
     </div>`;
     document.body.insertAdjacentHTML('beforeend', modalHtml);
@@ -33,7 +30,6 @@ function setupCertModal() {
         if (!path) return;
         const modal = document.getElementById('certModal');
         const container = document.getElementById('certContainer');
-        const downloadBtn = document.getElementById('downloadBtn');
 
         container.innerHTML = '';
         const ext = path.split('.').pop().toLowerCase();
@@ -46,7 +42,6 @@ function setupCertModal() {
         }
 
         container.innerHTML = content;
-        downloadBtn.href = path;
         modal.style.display = 'flex';
     };
 

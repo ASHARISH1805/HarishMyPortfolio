@@ -36,6 +36,9 @@ async function deploy() {
             await db.query(`ALTER TABLE ${table} ADD COLUMN IF NOT EXISTS certificate_visible BOOLEAN DEFAULT TRUE`);
         }
 
+        // Verify Link for Certifications
+        await db.query(`ALTER TABLE certifications ADD COLUMN IF NOT EXISTS verify_link VARCHAR(500)`);
+
         // 3. Seeding (Only if empty)
         console.log('Checking if seeding needed...');
         // Check projects table as indicator

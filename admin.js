@@ -274,7 +274,7 @@ function openModal(section, item = null) {
             ${fileField('Certificate File/Image', 'certificate_image_path', item?.certificate_image_path, item?.certificate_visible)}
             <div class="form-group">
                 <label>Verify Link (Optional URL)</label>
-                <input type="text" name="verify_link" value="${item ? item.verify_link : ''}">
+                <input type="text" name="verify_link" value="${item?.verify_link || ''}">
             </div>
         `;
     } else if (section === 'achievements') {
