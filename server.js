@@ -131,7 +131,34 @@ app.post('/api/admin/save', async (req, res) => {
         return res.status(400).json({ error: 'Invalid table name' });
     }
 
-    // Enforce visibility convention: If link is empty, force visibility to false
+    // Column Whitelist to prevent "Column does not exist" errors
+    const validColumns = {
+        skills: ['title', 'technologies', 'display_order', 'is_visible'],
+        projects: ['title', 'description', 'technologies', 'source_code_link', 'demo_video_link', 'live_demo_link', 'display_order', 'is_visible', 'is_featured', 'icon_class', 'source_code_visible', 'demo_video_visible', 'live_demo_visible', 'certificate_link', 'certificate_visible'],
+        internships: ['title', 'company', 'period', 'description', 'technologies', 'source_code_link', 'demo_video_link', 'live_demo_link', 'display_order', 'is_visible', 'icon_class', 'source_code_visible', 'demo_video_visible', 'live_demo_visible', 'certificate_link', 'certificate_visible'],
+        certifications: ['title', 'issuer', 'date_issued', 'description', 'certificate_image_path', 'display_order', 'is_visible', 'icon_class', 'certificate_visible', 'verify_link'],
+        achievements: ['title', 'role', 'description', 'source_code_link', 'demo_video_link', 'live_demo_link', 'display_order', 'is_visible', 'icon_class', 'source_code_visible', 'demo_video_visible', 'live_demo_visible', 'certificate_link', 'certificate_visible']
+    };
+
+    const tableColumns = validColumns[table];
+    if (!tableColumns) {
+        return res.status(400).json({ error: 'Table columns not defined' });
+    }
+
+    // Filter data to only include valid columns
+    const filteredData = {};
+    for (const key of Object.keys(data)) {
+        if (tableColumns.includes(key)) {
+            filteredData[key] = data[key];
+        } else {
+            console.log(`Ignoring invalid column '${key}' for table '${table}'`);
+        }
+    }
+
+    // Use filteredData instead of data
+    const dataToSave = filteredData;
+
+    // Enforce visibility logic on filtered data
     const linkMap = {
         'source_code_link': 'source_code_visible',
         'demo_video_link': 'demo_video_visible',
@@ -141,12 +168,13 @@ app.post('/api/admin/save', async (req, res) => {
     };
 
     for (const [linkCol, visibleCol] of Object.entries(linkMap)) {
-        // Only if the incoming data actually contains the link field (to avoid overwriting on partial patches if any)
-        // Since admin panel sends full object usually, this is fine.
-        if (data.hasOwnProperty(linkCol)) {
-            const val = data[linkCol];
+        if (dataToSave.hasOwnProperty(linkCol)) {
+            const val = dataToSave[linkCol];
             if (!val || String(val).trim() === '') {
-                data[visibleCol] = false;
+                // Ensure the visibility column is valid for this table before setting
+                if (tableColumns.includes(visibleCol)) {
+                    dataToSave[visibleCol] = false;
+                }
             }
         }
     }
@@ -155,16 +183,18 @@ app.post('/api/admin/save', async (req, res) => {
         if (id) {
             // UDPATE existing item
             // Dynamically build SET clause
-            const keys = Object.keys(data);
-            const values = Object.values(data);
+            const keys = Object.keys(dataToSave);
+            const values = Object.values(dataToSave);
+            if (keys.length === 0) return res.status(400).json({ error: 'No valid fields to update' });
+
             const setClause = keys.map((key, index) => `${key} = $${index + 1}`).join(', ');
 
             await db.query(`UPDATE ${table} SET ${setClause} WHERE id = $${keys.length + 1}`, [...values, id]);
             res.json({ message: 'Item updated successfully' });
         } else {
             // INSERT new item
-            const keys = Object.keys(data);
-            const values = Object.values(data);
+            const keys = Object.keys(dataToSave);
+            const values = Object.values(dataToSave);
             const columns = keys.join(', ');
             const placeholders = keys.map((_, index) => `$${index + 1}`).join(', ');
 

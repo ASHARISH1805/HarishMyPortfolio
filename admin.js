@@ -155,6 +155,7 @@ function openModal(section, item = null) {
     // Helper to generate file upload field
     const fileField = (label, name, value, isVisible) => {
         let checkboxName = name.replace('_link', '_visible').replace('_path', '_visible');
+        if (name === 'certificate_image_path') checkboxName = 'certificate_visible'; // Fix mismatch
         if (checkboxName === name) checkboxName = name + '_visible';
 
         return `
@@ -367,7 +368,7 @@ document.getElementById('adminForm').addEventListener('submit', async (e) => {
             fetchData(section); // Refresh list
         } else {
             const err = await response.json();
-            alert('Error: ' + err.error);
+            alert('Error: ' + err.error + (err.details ? '\nDetails: ' + err.details : ''));
         }
     } catch (err) {
         console.error(err);
