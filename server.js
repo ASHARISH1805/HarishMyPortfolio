@@ -186,7 +186,6 @@ app.post('/api/admin/save', async (req, res) => {
             const keys = Object.keys(dataToSave);
             const values = Object.values(dataToSave);
             if (keys.length === 0) return res.status(400).json({ error: 'No valid fields to update' });
-
             const setClause = keys.map((key, index) => `${key} = $${index + 1}`).join(', ');
 
             await db.query(`UPDATE ${table} SET ${setClause} WHERE id = $${keys.length + 1}`, [...values, id]);
