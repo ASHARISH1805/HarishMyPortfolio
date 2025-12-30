@@ -104,6 +104,29 @@ app.get('/api/achievements', async (req, res) => {
     }
 });
 
+// 6. CONTACT FORM SUBMISSION
+app.post('/api/contact', async (req, res) => {
+    try {
+        const { name, email, subject, message } = req.body;
+
+        // Validation
+        if (!name || !email || !message) {
+            return res.status(400).json({ error: 'Missing required fields' });
+        }
+
+        await db.query(`
+            INSERT INTO messages (name, email, subject, message)
+            VALUES ($1, $2, $3, $4)
+        `, [name, email, subject, message]);
+
+        console.log(`📩 New message from ${name} (${email})`);
+        res.json({ success: true, message: 'Message saved successfully' });
+    } catch (err) {
+        console.error('Contact Form Error:', err);
+        res.status(500).json({ error: 'Failed to save message' });
+    }
+});
+
 // 6. GET Stats
 app.get('/api/stats', async (req, res) => {
     try {

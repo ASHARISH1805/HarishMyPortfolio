@@ -169,10 +169,14 @@ if (typeof AOS !== 'undefined') {
 const contactForm = document.getElementById('contactForm');
 
 if (contactForm) {
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        // Get form values
+        const btn = contactForm.querySelector('button');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+        btn.disabled = true;
+
         const formData = {
             name: document.getElementById('name').value,
             email: document.getElementById('email').value,
@@ -180,12 +184,26 @@ if (contactForm) {
             message: document.getElementById('message').value
         };
 
-        // Here you would typically send the data to a backend service
-        // For now, we'll just show a success message
-        showNotification('Message sent successfully! I will get back to you soon.', 'success');
+        try {
+            const response = await fetch('/api/contact', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
 
-        // Reset form
-        contactForm.reset();
+            if (response.ok) {
+                showNotification('Message sent successfully! I will get back to you soon.', 'success');
+                contactForm.reset();
+            } else {
+                showNotification('Failed to send message. Please try again.', 'error');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            showNotification('Something went wrong. Please try again later.', 'error');
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
     });
 }
 

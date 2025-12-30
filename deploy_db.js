@@ -97,6 +97,20 @@ async function deploy() {
         `);
         console.log('✨ Visibility flags optimized.');
 
+        // 5. Create Messages Table (Contact Form)
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS messages (
+                id SERIAL PRIMARY KEY,
+                name VARCHAR(255),
+                email VARCHAR(255),
+                subject VARCHAR(255),
+                message TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                is_read BOOLEAN DEFAULT FALSE
+            )
+        `);
+        console.log('✅ Messages table ready.');
+
         console.log('✅ Deployment DB Check Complete.');
         process.exit(0);
 
