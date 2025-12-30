@@ -134,7 +134,7 @@ app.post('/api/admin/save', async (req, res) => {
     // Column Whitelist to prevent "Column does not exist" errors
     const validColumns = {
         skills: ['title', 'technologies', 'display_order', 'is_visible'],
-        projects: ['title', 'description', 'technologies', 'source_code_link', 'demo_video_link', 'live_demo_link', 'display_order', 'is_visible', 'is_featured', 'icon_class', 'source_code_visible', 'demo_video_visible', 'live_demo_visible', 'certificate_link', 'certificate_visible'],
+        projects: ['title', 'description', 'technologies', 'source_code_link', 'demo_video_link', 'live_demo_link', 'display_order', 'is_visible', 'is_featured', 'icon_class', 'source_code_visible', 'demo_video_visible', 'live_demo_visible', 'certificate_link', 'certificate_visible', 'project_image_path'],
         internships: ['title', 'company', 'period', 'description', 'technologies', 'source_code_link', 'demo_video_link', 'live_demo_link', 'display_order', 'is_visible', 'icon_class', 'source_code_visible', 'demo_video_visible', 'live_demo_visible', 'certificate_link', 'certificate_visible'],
         certifications: ['title', 'issuer', 'date_issued', 'description', 'certificate_image_path', 'display_order', 'is_visible', 'icon_class', 'certificate_visible', 'verify_link'],
         achievements: ['title', 'role', 'description', 'source_code_link', 'demo_video_link', 'live_demo_link', 'display_order', 'is_visible', 'icon_class', 'source_code_visible', 'demo_video_visible', 'live_demo_visible', 'certificate_link', 'certificate_visible']

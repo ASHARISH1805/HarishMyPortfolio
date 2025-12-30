@@ -13,8 +13,44 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         setupCertModal();
+        setupProjectModal();
     }
 });
+
+function setupProjectModal() {
+    const modalHtml = `
+    <div id="projectModal" class="project-modal">
+        <div class="project-modal-content">
+            <span class="close-project-modal" onclick="document.getElementById('projectModal').style.display='none'">&times;</span>
+            <img id="projectModalImg" class="project-modal-image" src="" alt="Project Preview">
+        </div>
+    </div>`;
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+    window.openProjectModal = (path) => {
+        if (!path) return;
+        const modal = document.getElementById('projectModal');
+        const img = document.getElementById('projectModalImg');
+
+        // Optional: Add a spinner or loading state here if desired
+        img.style.opacity = '0';
+        img.src = path;
+
+        modal.style.display = 'flex';
+
+        img.onload = () => {
+            img.style.transition = 'opacity 0.3s ease';
+            img.style.opacity = '1';
+        };
+    };
+
+    window.onclick = (e) => {
+        const pModal = document.getElementById('projectModal');
+        const cModal = document.getElementById('certModal');
+        if (e.target == pModal) pModal.style.display = 'none';
+        if (e.target == cModal) cModal.style.display = 'none';
+    }
+}
 
 function setupCertModal() {
     const modalHtml = `
@@ -88,9 +124,14 @@ async function loadProjects() {
         const container = document.querySelector('.projects-grid');
         if (!container || !projects.length) return;
 
-        container.innerHTML = projects.map((project, index) => `
-            <div class="project-card ${project.is_featured ? 'featured' : ''}" data-aos="fade-up" data-aos-delay="${index * 100}">
-                ${project.is_featured ? '<div class="project-badge">Major Project</div>' : ''}
+        container.innerHTML = projects.map((project, index) => {
+            const hasPopup = project.project_image_path && project.project_image_path.trim() !== '';
+            const cursorStyle = hasPopup ? 'cursor: pointer;' : '';
+            const clickAttr = hasPopup ? `onclick="openProjectModal('${project.project_image_path}')"` : '';
+
+            return `
+            <div class="project-card ${project.is_featured ? 'featured' : ''}" data-aos="fade-up" data-aos-delay="${index * 100}" 
+                 style="${cursorStyle}" ${clickAttr}>
                 <div class="project-icon">
                     <i class="${project.icon_class || 'fas fa-laptop-code'}"></i>
                 </div>
@@ -99,7 +140,7 @@ async function loadProjects() {
                 <div class="project-tech">
                     ${project.technologies.split(',').map(tech => `<span class="tech-tag">${tech.trim()}</span>`).join('')}
                 </div>
-                <div class="project-links icon-badge-wrapper">
+                <div class="project-links icon-badge-wrapper" onclick="event.stopPropagation()">
                     ${project.source_code_link && project.source_code_visible !== false ? `
                     <a href="${project.source_code_link}" target="_blank" class="project-link icon-badge" data-type="github">
                         <i class="fab fa-github"></i> Source Code (GitHub)
@@ -117,11 +158,11 @@ async function loadProjects() {
                     
                     ${project.certificate_link && project.certificate_visible !== false ? `
                     <button onclick="openCertModal('${project.certificate_link}')" class="project-link icon-badge" data-type="certificate">
-                        <i class="fas fa-certificate"></i> View Certificate
+                        <i class="fas fa-image"></i> Project Home Page
                     </button>` : ''}
                 </div>
             </div>
-        `).join('');
+        `}).join('');
 
     } catch (e) { console.error('Error loading projects', e); }
 }
@@ -208,7 +249,7 @@ async function loadCertifications() {
                 <p class="cert-description">${cert.description}</p>
                 <div class="card-actions">
                     ${cert.certificate_visible !== false ? `
-                    <button onclick="openCertModal('${cert.certificate_image_path || '#'}')" class="icon-badge view-cert-btn">
+                    <button onclick="openCertModal('${cert.certificate_image_path || '#'}' )" class="icon-badge view-cert-btn">
                         <i class="fas fa-certificate"></i> View Certificate
                     </button>` : ''}
                 </div>

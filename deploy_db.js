@@ -39,6 +39,9 @@ async function deploy() {
         // Verify Link for Certifications
         await db.query(`ALTER TABLE certifications ADD COLUMN IF NOT EXISTS verify_link VARCHAR(500)`);
 
+        // Project Home Page Image
+        await db.query(`ALTER TABLE projects ADD COLUMN IF NOT EXISTS project_image_path VARCHAR(500)`);
+
         // 3. Seeding (Only if empty)
         console.log('Checking if seeding needed...');
         // Check projects table as indicator

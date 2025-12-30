@@ -224,7 +224,8 @@ function openModal(section, item = null) {
             ${linkField('Source Code Link', 'source_code_link', item?.source_code_link, item?.source_code_visible)}
             ${linkField('Demo Video Link', 'demo_video_link', item?.demo_video_link, item?.demo_video_visible)}
             ${linkField('Live Demo Link', 'live_demo_link', item?.live_demo_link, item?.live_demo_visible)}
-            ${fileField('Certificate File', 'certificate_link', item?.certificate_link, item?.certificate_visible)}
+            ${fileField('Home Page Image', 'certificate_link', item?.certificate_link, item?.certificate_visible)}
+            ${fileField('Project Home Page Image (Popup)', 'project_image_path', item?.project_image_path, true)}
         `;
     } else if (section === 'internships') {
         fields = `
