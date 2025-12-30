@@ -119,12 +119,18 @@ function scrollActive() {
         const sectionHeight = section.offsetHeight;
         const sectionTop = section.offsetTop - 100;
         const sectionId = section.getAttribute('id');
+
+        // Main Nav
         const navLink = document.querySelector(`.nav-link[href="#${sectionId}"]`);
+        // Quick Nav
+        const quickLink = document.querySelector(`.quick-nav-item[href="#${sectionId}"]`);
 
         if (scrollY > sectionTop && scrollY <= sectionTop + sectionHeight) {
             navLink?.classList.add('active');
+            quickLink?.classList.add('active');
         } else {
             navLink?.classList.remove('active');
+            quickLink?.classList.remove('active');
         }
     });
 }
