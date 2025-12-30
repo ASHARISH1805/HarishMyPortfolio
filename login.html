@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login - Portfolio</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -19,7 +20,7 @@
 
         .login-card {
             background: white;
-            padding: 2rem;
+            padding: 2.5rem;
             border-radius: 12px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             width: 100%;
@@ -29,41 +30,29 @@
 
         h2 {
             color: #2563eb;
-            margin-bottom: 1.5rem;
+            margin-bottom: 0.5rem;
         }
 
-        input {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 1rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 1rem;
-        }
-
-        button {
-            width: 100%;
-            padding: 12px;
-            background: #2563eb;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-
-        button:hover {
-            background: #1d4ed8;
+        p {
+            color: #64748b;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
         }
 
         .error {
-            color: #ef4444;
-            margin-bottom: 1rem;
+            background: #ffe4e6;
+            color: #be123c;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
             display: none;
             font-size: 0.9rem;
+            border: 1px solid #fda4af;
+        }
+
+        .g_id_signin {
+            display: flex;
+            justify-content: center;
         }
     </style>
 </head>
@@ -71,42 +60,79 @@
 <body>
     <div class="login-card">
         <h2>Admin Portal</h2>
-        <div id="errorMsg" class="error">Invalid Password</div>
-        <input type="password" id="password" placeholder="Enter Admin Key">
-        <button onclick="login()">Access Panel</button>
+        <p>Restricted Access. Authorized personnel only.</p>
+
+        <div id="errorMsg" class="error">Access Denied</div>
+
+        <!-- Google Login Button Container -->
+        <div id="googleBtnContainer">Loading Login...</div>
     </div>
 
     <script>
-        async function login() {
-            const password = document.getElementById('password').value;
+        window.onload = async function () {
+            try {
+                // Fetch public Client ID from server
+                const res = await fetch('/api/auth/config');
+                const config = await res.json();
+
+                if (config.clientId) {
+                    // Initialize Google Sign-In
+                    google.accounts.id.initialize({
+                        client_id: config.clientId,
+                        callback: handleCredentialResponse,
+                        auto_select: false
+                    });
+
+                    document.getElementById('googleBtnContainer').innerHTML = ''; // Clear loading text
+
+                    google.accounts.id.renderButton(
+                        document.getElementById("googleBtnContainer"),
+                        { theme: "outline", size: "large", width: 250 }  // customization attributes
+                    );
+                } else {
+                    document.getElementById('googleBtnContainer').innerHTML =
+                        '<p style="color:red; font-size:0.9em">Error: GOOGLE_CLIENT_ID missing in server environment.</p>';
+                }
+            } catch (e) {
+                console.error(e);
+                document.getElementById('googleBtnContainer').innerHTML = '<p>Connection Error</p>';
+            }
+        };
+
+        async function handleCredentialResponse(response) {
             const errorMsg = document.getElementById('errorMsg');
+            errorMsg.style.display = 'none';
 
             try {
-                const res = await fetch('/api/verify-password', {
+                // Send the JWT token to our backend
+                const res = await fetch('/api/auth/google', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ password })
+                    body: JSON.stringify({ token: response.credential })
                 });
 
                 const data = await res.json();
 
                 if (data.success) {
-                    localStorage.setItem('adminKey', password);
+                    // Success! Store the returned admin key
+                    localStorage.setItem('adminKey', data.token);
                     window.location.href = 'admin.html';
                 } else {
+                    // Auth failed (e.g. email not in whitelist)
+                    errorMsg.innerText = data.error || "Authentication Failed";
                     errorMsg.style.display = 'block';
                 }
             } catch (err) {
                 console.error(err);
-                errorMsg.innerText = "Connection Error";
+                errorMsg.innerText = "Connection Error to Server";
                 errorMsg.style.display = 'block';
             }
         }
 
-        // Allow Enter key
-        document.getElementById('password').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') login();
-        });
+        // Check if we need to show setup warning
+        // In a real scenario, the data-client_id needs to be injected from env,
+        // but for static HTML serve, we might need a fetch to get it or the user to manually edit.
+        // For this setup, I will assume the user has to edit the file or I inject it via a setup script.
     </script>
 </body>
 

@@ -181,23 +181,60 @@ app.get('/api/stats', async (req, res) => {
 
 // Middleware for Admin Security
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
+const { OAuth2Client } = require('google-auth-library');
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+const client = new OAuth2Client(GOOGLE_CLIENT_ID);
+
+const allowedEmails = [
+    'ushawin2020@gmail.com',
+    'drtmusha@rcee.co.in',
+    'anandhunharish@gmail.com',
+    'harishengg1805@gmail.com'
+];
+
+// Endpoint to provide public Client ID to frontend
+app.get('/api/auth/config', (req, res) => {
+    res.json({ clientId: GOOGLE_CLIENT_ID || '' });
+});
 
 const authMiddleware = (req, res, next) => {
     const password = req.headers['x-admin-password'];
     if (password === ADMIN_PASSWORD) {
         next();
     } else {
-        res.status(401).json({ error: 'Unauthorized: Invalid Admin Password' });
+        res.status(401).json({ error: 'Unauthorized: Invalid Admin Credentials' });
     }
 };
 
-// Verify Password Endpoint (for Login Page)
-app.post('/api/verify-password', (req, res) => {
-    const { password } = req.body;
-    if (password === ADMIN_PASSWORD) {
-        res.json({ success: true });
-    } else {
-        res.status(401).json({ success: false, error: 'Invalid Password' });
+// Google Auth Endpoint
+app.post('/api/auth/google', async (req, res) => {
+    const { token } = req.body;
+
+    if (!GOOGLE_CLIENT_ID) {
+        console.error('GOOGLE_CLIENT_ID is not set in environment variables');
+        return res.status(500).json({ success: false, error: 'Server configuration error: Missing Client ID' });
+    }
+
+    try {
+        const ticket = await client.verifyIdToken({
+            idToken: token,
+            audience: GOOGLE_CLIENT_ID,
+        });
+        const payload = ticket.getPayload();
+        const email = payload.email;
+
+        console.log(`Google Auth Attempt: ${email}`);
+
+        if (allowedEmails.includes(email)) {
+            // SUCCESS: Return the internal ADMIN_PASSWORD to the client to store as their "session key"
+            // This allows existing admin.js logic to work unchanged.
+            res.json({ success: true, token: ADMIN_PASSWORD });
+        } else {
+            res.status(403).json({ success: false, error: 'Access Denied: Email not authorized' });
+        }
+    } catch (error) {
+        console.error('Google Auth Error:', error);
+        res.status(401).json({ success: false, error: 'Invalid Google Token' });
     }
 });
 
