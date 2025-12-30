@@ -120,6 +120,37 @@ app.post('/api/contact', async (req, res) => {
         `, [name, email, subject, message]);
 
         console.log(`📩 New message from ${name} (${email})`);
+
+        // Email Notification (using nodemailer)
+        try {
+            const nodemailer = require('nodemailer');
+            // Check if credentials exist (basic check)
+            if (process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+                const transporter = nodemailer.createTransport({
+                    service: 'gmail',
+                    auth: {
+                        user: process.env.EMAIL_USER,
+                        pass: process.env.EMAIL_PASS
+                    }
+                });
+
+                const mailOptions = {
+                    from: process.env.EMAIL_USER,
+                    to: 'ushawin2020@gmail.com', // User requested email
+                    subject: `Portfolio Contact: ${subject}`,
+                    text: `You have received a new message from your portfolio website.\n\nFrom: ${name} (${email})\nSubject: ${subject}\n\nMessage:\n${message}`
+                };
+
+                await transporter.sendMail(mailOptions);
+                console.log('📧 Email notification sent to ushawin2020@gmail.com');
+            } else {
+                console.log('⚠️ Email credentials missing in .env. Skipping email notification.');
+            }
+        } catch (emailErr) {
+            console.error('Failed to send email notification:', emailErr);
+            // Don't fail the request, just log the error
+        }
+
         res.json({ success: true, message: 'Message saved successfully' });
     } catch (err) {
         console.error('Contact Form Error:', err);
@@ -127,7 +158,18 @@ app.post('/api/contact', async (req, res) => {
     }
 });
 
-// 6. GET Stats
+// 7. GET MESSAGES (Admin)
+app.get('/api/admin/messages', async (req, res) => {
+    try {
+        const result = await db.query('SELECT * FROM messages ORDER BY created_at DESC');
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// 8. GET Stats
 app.get('/api/stats', async (req, res) => {
     try {
         const projectsCount = await db.query('SELECT COUNT(*) FROM projects WHERE is_visible = TRUE');

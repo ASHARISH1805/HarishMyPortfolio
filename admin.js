@@ -68,6 +68,40 @@ async function fetchData(section) {
     const container = document.getElementById(`${section}-list`);
     container.innerHTML = 'Loading...';
 
+    if (section === 'messages') {
+        container.innerHTML = 'Loading messages...';
+        try {
+            const response = await fetch('/api/admin/messages');
+            const messages = await response.json();
+
+            if (messages.length === 0) {
+                container.innerHTML = '<p>No messages yet.</p>';
+                return;
+            }
+
+            container.innerHTML = messages.map(msg => `
+                <div class="item-row message-row" style="cursor:default;">
+                    <div style="flex:1">
+                        <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
+                            <strong>${msg.subject}</strong>
+                            <small>${new Date(msg.created_at).toLocaleString()}</small>
+                        </div>
+                        <div style="margin-bottom:5px;">
+                            <span style="color:var(--primary-color)">${msg.name}</span> &lt;${msg.email}&gt;
+                        </div>
+                        <div style="background:#f8f9fa; padding:10px; border-radius:5px; white-space:pre-wrap;">${msg.message}</div>
+                    </div>
+                </div>
+            `).join('');
+            return; // No sortable for messages
+        } catch (e) {
+            console.error(e);
+            container.innerHTML = '<p style="color:red">Error loading messages</p>';
+            return;
+        }
+    }
+
+    // Existing Fetch Logic for other sections
     try {
         const response = await fetch(`${API_URL}/${section}?include_hidden=true`);
         const data = await response.json();
@@ -92,7 +126,7 @@ async function fetchData(section) {
             </div>
         `).join('');
 
-        // Initialize Sortable
+
         new Sortable(container, {
             animation: 150,
             ghostClass: 'sortable-ghost',
