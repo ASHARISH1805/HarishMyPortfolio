@@ -12,7 +12,8 @@ const multer = require('multer');
 
 // Middleware
 app.use(cors());
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(express.static(path.join(__dirname))); // Serve current folder
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve uploads folder
 
