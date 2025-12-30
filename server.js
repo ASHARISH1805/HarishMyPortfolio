@@ -189,7 +189,8 @@ const allowedEmails = [
     'ushawin2020@gmail.com',
     'drtmusha@rcee.co.in',
     'anandhunharish@gmail.com',
-    'harishengg1805@gmail.com'
+    'harishengg1805@gmail.com',
+    'harinisugumar185@gmail.com'
 ];
 
 // Endpoint to provide public Client ID to frontend
