@@ -183,7 +183,7 @@ app.get('/api/stats', async (req, res) => {
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
 const { OAuth2Client } = require('google-auth-library');
 // Use Environment Variable or fallback to the known ID provided by user
-const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '625155726760-dbnai59p0g94ugq43hi7n94v6nj4g874.apps.googleusercontent.com';
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '631887364280-qhgrh2c9jdc3901kdklokrks21cugppa.apps.googleusercontent.com';
 const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 const allowedEmails = [
@@ -235,16 +235,6 @@ app.post('/api/auth/google', async (req, res) => {
     } catch (error) {
         console.error('Google Auth Error:', error);
         res.status(401).json({ success: false, error: 'Invalid Google Token' });
-    }
-});
-
-// Dev/Emergency Login Endpoint
-app.post('/api/auth/login', (req, res) => {
-    const { password } = req.body;
-    if (password === ADMIN_PASSWORD) {
-        res.json({ success: true, token: ADMIN_PASSWORD });
-    } else {
-        res.status(401).json({ success: false, error: 'Invalid Password' });
     }
 });
 
