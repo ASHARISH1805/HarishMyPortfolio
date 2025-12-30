@@ -842,6 +842,14 @@ section {
     /* Pushes content down */
     font-size: 0.95rem;
     /* Ensure readable font size */
+
+    /* Clamp text to 4 lines to prevent overlap */
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .project-tech {
