@@ -38,6 +38,11 @@ async function loadInternships() {
                 <ul class="entry-details">
                     ${formatList(data.description)}
                 </ul>
+                <div class="resume-links" style="font-size: 9pt; margin-left: 18px; margin-top: 2px;">
+                    ${data.source_code_link ? `<a href="${data.source_code_link}" target="_blank">Source Code</a>` : ''}
+                    ${data.live_demo_link ? ` | <a href="${data.live_demo_link}" target="_blank">Live Demo</a>` : ''}
+                    ${data.certificate_link ? ` | <a href="${data.certificate_link}" target="_blank">Certificate</a>` : ''}
+                </div>
             </div>
         `).join('');
     } catch (e) { console.error(e); }
@@ -59,6 +64,12 @@ async function loadProjects() {
                 </div>
                 <p style="font-size: 10pt; color: #475569;">${project.description}</p>
                 <div class="project-tech">Tech: ${project.technologies}</div>
+                <div class="resume-links" style="font-size: 9pt; margin-top: 2px;">
+                    ${project.source_code_link ? `<a href="${project.source_code_link}" target="_blank">Source Code</a>` : ''}
+                    ${project.live_demo_link ? ` | <a href="${project.live_demo_link}" target="_blank">Live Demo</a>` : ''}
+                    ${project.demo_video_link ? ` | <a href="${project.demo_video_link}" target="_blank">Demo Video</a>` : ''}
+                    ${project.certificate_link ? ` | <a href="${project.certificate_link}" target="_blank">Project Link</a>` : ''}
+                </div>
             </div>
         `).join('');
     } catch (e) { console.error(e); }
@@ -71,12 +82,19 @@ async function loadCertifications() {
         const container = document.getElementById('resume-certs');
 
         // Compact list
-        container.innerHTML = certs.slice(0, 6).map(cert => `
+        // Compact list with links
+        container.innerHTML = certs.slice(0, 6).map(cert => {
+            const link = cert.certificate_link || cert.certificate_image_path || '#';
+            const isClickable = link !== '#';
+            return `
             <div class="cert-item">
-                <div class="cert-name">${cert.title}</div>
+                <div class="cert-name">
+                    ${isClickable ? `<a href="${link}" target="_blank" style="text-decoration:none; color:inherit;">${cert.title} <i class="fas fa-external-link-alt" style="font-size:0.7em"></i></a>` : cert.title}
+                </div>
                 <div class="cert-issuer">${cert.issuer} | ${cert.date_issued || cert.date}</div>
             </div>
-        `).join('');
+            `;
+        }).join('');
     } catch (e) { console.error(e); }
 }
 
