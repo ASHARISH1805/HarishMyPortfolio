@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harish A.S - Resume</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="resume.css">
+</head>
+
+<body>
+
+    <div class="resume-controls">
+        <button onclick="window.print()" class="btn-print"><i class="fas fa-print"></i> Save as PDF / Print</button>
+        <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Back to Portfolio</a>
+    </div>
+
+    <div class="resume-container">
+        <!-- Header -->
+        <header class="resume-header">
+            <h1 class="name">Harish A.S</h1>
+            <p class="title">B.E. Student - Artificial Intelligence & Data Science</p>
+            <div class="contact-info">
+                <span><i class="fas fa-envelope"></i> anandhunharish@gmail.com</span>
+                <span><i class="fas fa-phone"></i> +91 83282 33110</span>
+                <span><i class="fab fa-linkedin"></i> linkedin.com/in/asharish</span>
+                <span><i class="fab fa-github"></i> github.com/asharish1805</span>
+                <span><i class="fas fa-map-marker-alt"></i> Eluru, Andhra Pradesh</span>
+            </div>
+        </header>
+
+        <!-- Summary -->
+        <section class="section summary-section">
+            <h2 class="section-title">Professional Summary</h2>
+            <p>
+                Aspiring AI & Data Science Engineer with strong hands-on project experience in Machine Learning, Deep
+                Learning, Natural Language Processing, and Data Analytics.
+                Proven ability to develop end-to-end solutions, from predictive models to interactive dashboards.
+                Passionate about leveraging AI to solve real-world problems and optimize processes.
+            </p>
+        </section>
+
+        <!-- Skills -->
+        <section class="section skills-section">
+            <h2 class="section-title">Technical Skills</h2>
+            <div id="resume-skills" class="skills-list">
+                <!-- Dynamic Content -->
+                <div class="loading">Loading Skills...</div>
+            </div>
+        </section>
+
+        <!-- Education -->
+        <section class="section">
+            <h2 class="section-title">Education</h2>
+            <div class="entry">
+                <div class="entry-header">
+                    <span class="entry-title">B.E. in Artificial Intelligence & Data Science</span>
+                    <span class="entry-date">2022 - 2026 (Expected)</span>
+                </div>
+                <div class="entry-subtitle">Ramachandra College of Engineering, Eluru</div>
+                <ul class="entry-details">
+                    <li>Current CGPA: 7.47</li>
+                </ul>
+            </div>
+            <div class="entry">
+                <div class="entry-header">
+                    <span class="entry-title">Intermediate (MPC)</span>
+                    <span class="entry-date">2020 - 2022</span>
+                </div>
+                <div class="entry-subtitle">Sri Chaitanya Junior College, Vijayawada</div>
+                <ul class="entry-details">
+                    <li>Percentage: 74%</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Experience / Internships -->
+        <section class="section">
+            <h2 class="section-title">Internship Experience</h2>
+            <div id="resume-internships">
+                <!-- Dynamic Content -->
+                <div class="loading">Loading Internships...</div>
+            </div>
+        </section>
+
+        <!-- Projects -->
+        <section class="section">
+            <h2 class="section-title">Key Projects</h2>
+            <div id="resume-projects">
+                <!-- Dynamic Content -->
+                <div class="loading">Loading Projects...</div>
+            </div>
+        </section>
+
+        <!-- Certifications -->
+        <section class="section">
+            <h2 class="section-title">Certifications</h2>
+            <div id="resume-certs" class="cert-grid">
+                <!-- Dynamic Content -->
+                <div class="loading">Loading Certifications...</div>
+            </div>
+        </section>
+
+        <!-- Achievements -->
+        <section class="section">
+            <h2 class="section-title">Achievements & Activities</h2>
+            <div id="resume-achievements">
+                <!-- Dynamic Content -->
+                <div class="loading">Loading Achievements...</div>
+            </div>
+        </section>
+
+    </div>
+
+    <script src="resume.js"></script>
+</body>
+
+</html>
