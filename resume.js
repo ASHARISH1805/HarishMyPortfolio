@@ -14,8 +14,8 @@ async function loadSkills() {
 
         container.innerHTML = skills.map(skill => `
             <div style="flex-basis: 48%; margin-bottom: 5px;">
-                <span class="skill-category">${skill.category}:</span>
-                <span class="skill-items">${skill.items}</span>
+                <span class="skill-category">${skill.title}:</span>
+                <span class="skill-items">${skill.technologies}</span>
             </div>
         `).join('');
     } catch (e) { console.error(e); }
