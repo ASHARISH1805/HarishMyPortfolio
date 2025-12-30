@@ -42,6 +42,9 @@ async function deploy() {
         // Project Home Page Image
         await db.query(`ALTER TABLE projects ADD COLUMN IF NOT EXISTS project_image_path VARCHAR(500)`);
 
+        // Migration: Add icon_class to skills if missing
+        await db.query(`ALTER TABLE skills ADD COLUMN IF NOT EXISTS icon_class VARCHAR(50) DEFAULT 'fas fa-code'`);
+
         // ==========================================
         // FORCE UPDATE SKILLS (User Requirement)
         // ==========================================
