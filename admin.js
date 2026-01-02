@@ -19,6 +19,28 @@ function logout() {
     window.location.href = 'login.html';
 }
 
+async function downloadBackup() {
+    try {
+        const res = await fetch('/api/admin/backup', {
+            headers: getAuthHeaders()
+        });
+
+        if (!res.ok) throw new Error('Backup failed');
+
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `portfolio-backup-${new Date().toISOString().slice(0, 10)}.json`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+    } catch (err) {
+        alert('Failed to download backup: ' + err.message);
+    }
+}
+
 // Display Admin Email
 const adminEmail = localStorage.getItem('adminEmail');
 if (adminEmail) {

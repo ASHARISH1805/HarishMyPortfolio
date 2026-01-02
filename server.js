@@ -241,6 +241,56 @@ app.post('/api/auth/google', async (req, res) => {
 // Protect all /api/admin/* routes
 app.use('/api/admin', authMiddleware);
 
+// Backup Endpoint - Exports all data
+app.get('/api/admin/backup', async (req, res) => {
+    try {
+        const tables = ['skills', 'projects', 'internships', 'certifications', 'achievements', 'messages'];
+        const backupData = {};
+
+        for (const table of tables) {
+            const result = await db.query(`SELECT * FROM ${table}`);
+            backupData[table] = result.rows;
+        }
+
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+        const filename = `portfolio_backup_${timestamp}.json`;
+
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Content-Disposition', `attachment; filename=${filename}`);
+        res.json(backupData);
+    } catch (err) {
+        console.error('Backup Error:', err);
+        res.status(500).json({ error: 'Failed to create backup' });
+    }
+});
+
+// View Endpoint (GET data for admin)
+app.get('/api/admin/view/:table', async (req, res) => {
+    const { table } = req.params;
+    const allowedTables = ['skills', 'projects', 'internships', 'certifications', 'achievements', 'messages'];
+    if (!allowedTables.includes(table)) {
+        return res.status(400).json({ error: 'Invalid table name' });
+    }
+
+    try {
+        let query = `SELECT * FROM ${table} ORDER BY id ASC`;
+        // For ordered tables, respect display_order
+        if (['skills', 'projects', 'internships', 'certifications', 'achievements'].includes(table)) {
+            query = `SELECT * FROM ${table} ORDER BY display_order ASC`;
+        }
+        // Messages order by date
+        if (table === 'messages') {
+            query = `SELECT * FROM messages ORDER BY created_at DESC`;
+        }
+
+        const result = await db.query(query);
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Database error' });
+    }
+});
+
 // Generic Save Endpoint
 app.post('/api/admin/save', async (req, res) => {
     const { table, id, ...data } = req.body;
@@ -389,6 +439,59 @@ app.post('/api/admin/upload', upload.single('file'), (req, res) => {
     res.json({ filePath: dataURI });
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+// ================= DATABASE AUTO-MIGRATION =================
+async function ensureSchema() {
+    try {
+        console.log('🔄 Checking Database Schema...');
+
+        // 1. Create Messages Table
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS messages (
+                id SERIAL PRIMARY KEY,
+                name VARCHAR(255),
+                email VARCHAR(255),
+                subject VARCHAR(255),
+                message TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                is_read BOOLEAN DEFAULT FALSE
+            )
+        `);
+
+        // 2. Ensure Columns Exist (Safe Alter)
+        const tables = ['projects', 'internships', 'achievements'];
+        const links = ['source_code', 'demo_video', 'live_demo'];
+
+        // Add Visible Columns
+        for (const table of tables) {
+            for (const link of links) {
+                const colName = `${link}_visible`;
+                await db.query(`ALTER TABLE ${table} ADD COLUMN IF NOT EXISTS ${colName} BOOLEAN DEFAULT TRUE`);
+            }
+            // Add Certificate Link
+            await db.query(`ALTER TABLE ${table} ADD COLUMN IF NOT EXISTS certificate_link TEXT`);
+            // Add Certificate Visible
+            await db.query(`ALTER TABLE ${table} ADD COLUMN IF NOT EXISTS certificate_visible BOOLEAN DEFAULT TRUE`);
+        }
+
+        // Certifications Table
+        await db.query(`ALTER TABLE certifications ADD COLUMN IF NOT EXISTS certificate_visible BOOLEAN DEFAULT TRUE`);
+        await db.query(`ALTER TABLE certifications ADD COLUMN IF NOT EXISTS verify_link VARCHAR(500)`);
+
+        // Projects Image
+        await db.query(`ALTER TABLE projects ADD COLUMN IF NOT EXISTS project_image_path TEXT`);
+
+        // Skills Icon
+        await db.query(`ALTER TABLE skills ADD COLUMN IF NOT EXISTS icon_class VARCHAR(50) DEFAULT 'fas fa-code'`);
+
+        console.log('✅ Database Schema Verified.');
+    } catch (err) {
+        console.error('❌ Schema Check Failed:', err);
+    }
+}
+
+// Start Server
+ensureSchema().then(() => {
+    app.listen(PORT, () => {
+        console.log(`Server running on http://localhost:${PORT}`);
+    });
 });

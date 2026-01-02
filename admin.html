@@ -208,10 +208,16 @@
                 <small style="color: #666; font-size: 0.9em;">Logged in as: <span id="adminEmailDisplay"
                         style="color: #2563eb; font-weight: 600;">...</span></small>
             </div>
-            <button onclick="logout()" class="btn btn-delete"
-                style="padding: 0.5rem 1.5rem; display: flex; align-items: center; gap: 8px;">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </button>
+            <div style="display: flex; gap: 10px;">
+                <button onclick="downloadBackup()" class="btn btn-secondary"
+                    style="padding: 0.5rem 1.5rem; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-download"></i> Backup Data
+                </button>
+                <button onclick="logout()" class="btn btn-delete"
+                    style="padding: 0.5rem 1.5rem; display: flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
         </div>
 
         <div class="tabs">
