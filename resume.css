@@ -33,6 +33,7 @@ body {
 }
 
 .btn-print,
+.btn-download,
 .btn-back {
     padding: 10px 20px;
     border-radius: 5px;
@@ -55,6 +56,11 @@ body {
 .btn-back {
     background: white;
     color: var(--text-dark);
+}
+
+.btn-download {
+    background: #10b981;
+    color: white;
 }
 
 /* Resume Paper Styling */
