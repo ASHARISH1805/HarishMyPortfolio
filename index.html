@@ -115,44 +115,89 @@
 
             <!-- Hero Visual -->
             <div class="hero-image">
-                <div class="hero-card">
-                    <div class="code-window">
-                        <div class="window-header">
-                            <div class="window-dots">
-                                <div class="dot red"></div>
-                                <div class="dot yellow"></div>
-                                <div class="dot green"></div>
+                <div class="hero-card" style="animation: none;">
+                    <div class="hero-saas-showcase">
+                        <div class="saas-header">
+                            <div class="saas-title-group">
+                                <div class="saas-badge">Featured</div>
+                                <h3>Micro-SaaS Products</h3>
                             </div>
-                            <div class="window-title">harish_profile.py</div>
+                            <p>Next-Gen Tools Built for Scale</p>
                         </div>
-                        <div class="code-content">
-                            <div class="line">
-                                <span class="code-keyword">class</span> <span class="code-class">DataScientist</span>:
+                        <div class="saas-list">
+                            <!-- Item 1: StreamFlow -->
+                            <div class="saas-item active-saas" onclick="openSaasModal(0)">
+                                <div class="saas-icon"
+                                    style="background: linear-gradient(135deg, #E50914, #B81D24); box-shadow: 0 4px 15px rgba(229, 9, 20, 0.4);">
+                                    <i class="fas fa-play"></i>
+                                </div>
+                                <div class="saas-info">
+                                    <h4>StreamFlow</h4>
+                                    <span>Netflix AI Copilot</span>
+                                </div>
+                                <div class="saas-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
                             </div>
-                            <div class="line">
-                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">def</span> <span
-                                    class="code-function">__init__</span>(<span class="code-keyword">self</span>):
+
+                            <!-- Item 2: RecruitAI -->
+                            <div class="saas-item" onclick="openSaasModal(1)">
+                                <div class="saas-icon"
+                                    style="background: linear-gradient(135deg, #0077B5, #00A0DC); box-shadow: 0 4px 15px rgba(0, 119, 181, 0.4);">
+                                    <i class="fas fa-robot"></i>
+                                </div>
+                                <div class="saas-info">
+                                    <h4>RecruitAI</h4>
+                                    <span>HR Tech Automation</span>
+                                </div>
+                                <div class="saas-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
                             </div>
-                            <div class="line">
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
-                                    class="code-keyword">self</span>.name = <span class="code-string">"Harish
-                                    A.S"</span>
+
+                            <!-- Item 3: DocuMind -->
+                            <div class="saas-item" onclick="openSaasModal(2)">
+                                <div class="saas-icon"
+                                    style="background: linear-gradient(135deg, #10B981, #34D399); box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);">
+                                    <i class="fas fa-file-invoice"></i>
+                                </div>
+                                <div class="saas-info">
+                                    <h4>DocuMind</h4>
+                                    <span>Intelligent Docs</span>
+                                </div>
+                                <div class="saas-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
                             </div>
-                            <div class="line">
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span
-                                    class="code-keyword">self</span>.skills = [<span class="code-string">"AI"</span>,
-                                <span class="code-string">"ML"</span>, <span class="code-string">"Data Science"</span>]
+
+                            <!-- Item 4: FinTrack -->
+                            <div class="saas-item" onclick="openSaasModal(3)">
+                                <div class="saas-icon"
+                                    style="background: linear-gradient(135deg, #F59E0B, #FBBF24); box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);">
+                                    <i class="fas fa-chart-pie"></i>
+                                </div>
+                                <div class="saas-info">
+                                    <h4>FinTrack</h4>
+                                    <span>Finance Analytics</span>
+                                </div>
+                                <div class="saas-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
                             </div>
-                            <div class="line">
-                                <br>
-                            </div>
-                            <div class="line">
-                                &nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">def</span> <span
-                                    class="code-function">mission</span>(<span class="code-keyword">self</span>):
-                            </div>
-                            <div class="line">
-                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-keyword">return</span>
-                                <span class="code-string">"Innovating with Data"</span>
+
+                            <!-- Item 5: EdSync -->
+                            <div class="saas-item" onclick="openSaasModal(4)">
+                                <div class="saas-icon"
+                                    style="background: linear-gradient(135deg, #8B5CF6, #A78BFA); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);">
+                                    <i class="fas fa-graduation-cap"></i>
+                                </div>
+                                <div class="saas-info">
+                                    <h4>EdSync</h4>
+                                    <span>Smart Learning</span>
+                                </div>
+                                <div class="saas-arrow">
+                                    <i class="fas fa-chevron-right"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -863,6 +908,50 @@
                     <p id="modalDate"></p>
                     <p id="modalDescription"></p>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Micro-SaaS Details Modal -->
+    <div id="saasModal" class="saas-modal">
+        <div class="saas-modal-content">
+            <div class="saas-modal-header">
+                <div class="saas-modal-title-group">
+                    <div class="saas-modal-icon" id="saasModalIcon">
+                        <i class="fas fa-cube"></i>
+                    </div>
+                    <div class="saas-modal-title">
+                        <h2 id="saasModalTitle">Product Name</h2>
+                        <span id="saasModalSubtitle">Subtitle</span>
+                    </div>
+                </div>
+                <button class="close-modal" onclick="closeSaasModal()">&times;</button>
+            </div>
+            <div class="saas-modal-body">
+                <div class="saas-description" id="saasModalDesc">
+                    Description goes here...
+                </div>
+
+                <div class="saas-detail-grid">
+                    <div class="saas-detail-item">
+                        <h4>Role</h4>
+                        <p id="saasModalRole">Lead Developer</p>
+                    </div>
+                    <div class="saas-detail-item">
+                        <h4>Status</h4>
+                        <p id="saasModalStatus">Prototype</p>
+                    </div>
+                </div>
+
+                <div class="saas-detail-item">
+                    <h4>Tech Stack</h4>
+                    <div class="saas-tech-stack" id="saasModalTech">
+                        <!-- Dynamic Tags -->
+                    </div>
+                </div>
+            </div>
+            <div class="saas-modal-footer">
+                <button class="btn btn-secondary" onclick="closeSaasModal()">Close</button>
             </div>
         </div>
     </div>

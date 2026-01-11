@@ -325,3 +325,107 @@ async function loadAchievements() {
         }).join('');
     } catch (e) { console.error('Error loading achievements', e); }
 }
+
+// ===================================
+// Micro-SaaS Showcase Logic
+// ===================================
+const saasProjects = [
+    {
+        title: "StreamFlow",
+        subtitle: "Netflix AI Copilot",
+        role: "Lead Developer & Product Designer",
+        status: "Prototype (MVP)",
+        desc: "Designed and developed a desktop automation ecosystem acting as an intelligent 'Co-pilot' for streaming platforms. Solving the 'choice paralysis' problem, this tool reduces the time-to-content by 90% through mood-based recommendations and autonomous navigation handling.",
+        tech: ["Python", "Selenium", "Tkinter", "OpenCV", "Threading"],
+        icon: "fas fa-play",
+        color: "linear-gradient(135deg, #E50914, #B81D24)"
+    },
+    {
+        title: "RecruitAI",
+        subtitle: "Smart Hiring Assistant",
+        role: "Full Stack Developer",
+        status: "Beta Testing",
+        desc: "An AI-powered recruitment platform that automates resume screening, schedules interviews, and provides candidate insights using NLP. Reduces hiring time by 40% and improves candidate matching accuracy.",
+        tech: ["Python", "FastAPI", "React", "NLP", "PostgreSQL"],
+        icon: "fas fa-robot",
+        color: "linear-gradient(135deg, #0077B5, #00A0DC)"
+    },
+    {
+        title: "DocuMind",
+        subtitle: "Intelligent Document Analysis",
+        role: "AI Engineer",
+        status: "Concept",
+        desc: "A document processing SaaS that uses OCR and LLMs to extract, summarize, and query information from legal and financial documents instantly, transforming unstructured data into actionable insights.",
+        tech: ["Python", "Tesseract", "Transformers", "Flask", "React"],
+        icon: "fas fa-file-invoice",
+        color: "linear-gradient(135deg, #10B981, #34D399)"
+    },
+    {
+        title: "FinTrack",
+        subtitle: "Personal Finance Analytics",
+        role: "Solutions Architect",
+        status: "Development",
+        desc: "A personal finance management tool that aggregates bank transactions, categorizes expenses using ML, and provides predictive budget insights to help users achieve financial goals.",
+        tech: ["Node.js", "Express", "MongoDB", "Chart.js", "ML.NET"],
+        icon: "fas fa-chart-pie",
+        color: "linear-gradient(135deg, #F59E0B, #FBBF24)"
+    },
+    {
+        title: "EdSync",
+        subtitle: "Smart Learning Platform",
+        role: "Lead Developer",
+        status: "Ideation",
+        desc: "An adaptive learning platform that customizes study plans based on student performance and learning pace. Features real-time progress tracking and resource recommendations.",
+        tech: ["Vue.js", "Firebase", "Python", "Sklearn"],
+        icon: "fas fa-graduation-cap",
+        color: "linear-gradient(135deg, #8B5CF6, #A78BFA)"
+    }
+];
+
+window.openSaasModal = function (index) {
+    const project = saasProjects[index];
+    if (!project) return;
+
+    // Update Modal Content
+    document.getElementById('saasModalTitle').innerText = project.title;
+    document.getElementById('saasModalSubtitle').innerText = project.subtitle;
+    document.getElementById('saasModalDesc').innerText = project.desc;
+    document.getElementById('saasModalRole').innerText = project.role;
+    document.getElementById('saasModalStatus').innerText = project.status;
+
+    // Icon
+    const iconContainer = document.getElementById('saasModalIcon');
+    iconContainer.innerHTML = `<i class="${project.icon}"></i>`;
+    iconContainer.style.background = project.color;
+
+    // Tech Stack
+    const techContainer = document.getElementById('saasModalTech');
+    techContainer.innerHTML = project.tech.map(t => `<span class="saas-tech">${t}</span>`).join('');
+
+    // Show Modal
+    const modal = document.getElementById('saasModal');
+    modal.classList.add('show');
+    modal.style.display = 'flex';
+
+    // Highlight sidebar item
+    document.querySelectorAll('.saas-item').forEach((item, i) => {
+        if (i === index) item.classList.add('active-saas');
+        else item.classList.remove('active-saas');
+    });
+}
+
+window.closeSaasModal = function () {
+    const modal = document.getElementById('saasModal');
+    modal.classList.remove('show');
+    setTimeout(() => {
+        modal.style.display = 'none';
+    }, 300);
+}
+
+// Close on click outside
+window.addEventListener('click', (e) => {
+    const modal = document.getElementById('saasModal');
+    if (e.target === modal) {
+        closeSaasModal();
+    }
+});
