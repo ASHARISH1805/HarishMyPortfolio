@@ -85,7 +85,11 @@ async function seedData() {
         console.log('🌱 Starting database seeding...');
 
         // 1. Skills
-        await seedSkills();
+        // Only seed if empty to distinguish between "new install" and "user deleted all skills"
+        const skillCount = await db.query('SELECT COUNT(*) FROM skills');
+        if (parseInt(skillCount.rows[0].count) === 0) {
+            await seedSkills();
+        }
 
         // 2. Projects (Check if empty before seeding to avoid duplicates during full seed)
         const projCount = await db.query('SELECT COUNT(*) FROM projects');
