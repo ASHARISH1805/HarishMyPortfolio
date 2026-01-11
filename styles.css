@@ -754,19 +754,14 @@ section {
 
 .skill-tag {
     display: inline-block;
-    padding: 0.2rem 0.6rem;
-    background: var(--bg-tertiary);
-    /* Very subtle background */
-    border-radius: 4px;
-    /* Slight rounded corners */
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: var(--text-primary);
-    margin: 0 0.3rem 0.4rem 0;
-    /* Tight spacing */
+    padding: 0;
+    background: transparent;
     border: none;
-    /* remove border */
-    transition: all var(--transition-fast);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin: 0 0.8rem 0.2rem 0;
+    transition: color var(--transition-fast);
 }
 
 .skill-tag:hover {
