@@ -55,8 +55,11 @@ async function deploy() {
             await db.query(`ALTER TABLE ${table} ALTER COLUMN certificate_link TYPE TEXT`);
         }
 
-        // Skills update removed to preserve online changes.
-        // Seeding logic in seed.js will handle populating skills ONLY if the table is empty.
+        // ==========================================
+        // FORCE UPDATE SKILLS (User Requirement)
+        // ==========================================
+        const { seedSkills } = require('./seed');
+        await seedSkills();
 
         // 3. Seeding (Only if empty for other tables)
         console.log('Checking if seeding needed...');
