@@ -420,17 +420,71 @@ section {
 /* ===================================
    Hero Section
    =================================== */
-.hero {
-    min-height: 50vh;
-    display: flex;
+@keyframes vibe-pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(236, 72, 153, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(236, 72, 153, 0);
+    }
+}
+
+.vibe-badge {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding-top: 70px;
-    padding-bottom: var(--spacing-md);
+    gap: 0.4rem;
+    font-size: 0.4em;
+    /* Relative to H1 */
+    vertical-align: middle;
+    margin-left: 1rem;
+    padding: 0.4rem 0.8rem;
+    background: linear-gradient(135deg, #ec4899, #8b5cf6);
+    color: white;
+    border-radius: 50px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: vibe-pulse 2s infinite;
+    transform: translateY(-0.2em);
+    /* Slight visual adjustment */
+}
+
+.vibe-badge i {
+    font-size: 1.1em;
+}
+
+/* Make it responsive */
+@media (max-width: 768px) {
+    .vibe-badge {
+        display: none;
+        /* Might crowd mobile, or make block */
+    }
+}
+
+.hero {
+    min-height: 90vh;
+    /* Slightly reduced height */
+    display: flex;
+    align-items: flex-start;
+    /* Align to top instead of center */
+    justify-content: center;
+    padding-top: 130px;
+    /* Specific offset from top (Nav height + gap) */
+    padding-bottom: 3rem;
     background:
         radial-gradient(circle at 20% 50%, hsla(180, 85%, 45%, 0.08) 0%, transparent 50%),
         radial-gradient(circle at 80% 80%, hsla(195, 90%, 50%, 0.08) 0%, transparent 50%);
     position: relative;
+    height: auto;
+    /* Allow growth */
 }
 
 .hero-container {
@@ -483,6 +537,39 @@ section {
     color: var(--text-secondary);
     line-height: 1.8;
     margin-bottom: var(--spacing-xl);
+}
+
+.hero-contact-info {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    /* Reduced from 2rem */
+    flex-wrap: wrap;
+}
+
+.hero-contact-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.hero-contact-link:hover {
+    color: var(--primary-color);
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    border-color: var(--primary-color);
+}
+
+.hero-contact-link i {
+    color: var(--primary-color);
 }
 
 .hero-buttons {
@@ -581,17 +668,8 @@ section {
 
 /* Scroll Indicator */
 .scroll-indicator {
-    position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--text-tertiary);
-    font-size: 0.875rem;
-    animation: bounce 2s infinite;
+    display: none;
+    /* Hidden due to expanded hero content */
 }
 
 /* ===================================
@@ -657,47 +735,68 @@ section {
 }
 
 .about-visual {
-    display: grid;
-    gap: 1.5rem;
+    display: flex;
+    /* Changed from grid to flex for better horizontal packing if desired, but let's stick to a compact vertical stack or grid */
+    flex-direction: column;
+    gap: 0.75rem;
+    /* Reduced gap */
+    max-width: 400px;
+    /* Limit width */
+    margin: 0 auto;
+    /* Center if needed */
 }
 
 .visual-card {
-    padding: 2rem;
+    padding: 1rem 1.5rem;
+    /* Reduced padding significantly */
     background: var(--bg-primary);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
     border: 1px solid var(--border-color);
     transition: all var(--transition-base);
+    display: flex;
+    /* Horizontal layout inside card */
+    align-items: center;
+    gap: 1rem;
+    text-align: left;
 }
 
 .visual-card:hover {
-    transform: translateX(10px);
+    transform: translateX(5px);
     border-color: var(--primary-color);
     box-shadow: var(--shadow-md);
 }
 
 .visual-icon {
-    width: 60px;
-    height: 60px;
+    width: 40px;
+    /* Smaller icon */
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: var(--gradient-primary);
-    border-radius: var(--radius-md);
-    margin-bottom: var(--spacing-md);
+    border-radius: var(--radius-sm);
+    margin-bottom: 0;
+    /* Remove bottom margin */
+    flex-shrink: 0;
 }
 
 .visual-icon i {
-    font-size: 1.5rem;
+    font-size: 1.1rem;
+    /* Smaller icon size */
     color: white;
 }
 
 .visual-card h3 {
-    font-size: 1.25rem;
-    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    margin-bottom: 0.1rem;
+    font-weight: 700;
 }
 
 .visual-card p {
+    font-size: 0.85rem;
     color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.3;
 }
 
 /* ===================================
@@ -2158,18 +2257,110 @@ section {
     transform: scale(1.1) rotate(-5deg);
 }
 
-.saas-info {
+.saas-item:hover .saas-info {
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.15rem;
+}
+
+.saas-section-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    margin-top: 1.5rem;
+    color: var(--primary-color);
+}
+
+.saas-section-header h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.saas-title-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.saas-tech {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+.saas-tech i {
+    font-size: 0.85rem;
+    /* color: var(--primary-color); remove specific color to let it inherit or be white */
+}
+
+/* Modal Headers with Icons */
+.saas-detail-item h4 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.saas-detail-item h4 i {
+    color: var(--primary-color);
+    font-size: 0.9rem;
 }
 
 .saas-info h4 {
-    font-size: 0.95rem;
+    font-size: 1rem;
     font-weight: 700;
-    margin-bottom: 2px;
+    margin: 0;
     color: var(--text-primary);
 }
 
-.saas-info span {
+.saas-status-pill {
+    font-size: 0.6rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+}
+
+/* Status Colors */
+.saas-status-default {
+    background: rgba(148, 163, 184, 0.2);
+    color: #94a3b8;
+    border: 1px solid rgba(148, 163, 184, 0.3);
+}
+
+.saas-status-dev {
+    background: rgba(245, 158, 11, 0.2);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.saas-status-prototype {
+    background: rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.saas-status-concept {
+    background: rgba(168, 85, 247, 0.2);
+    color: #c084fc;
+    border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.saas-status-live {
+    background: rgba(16, 185, 129, 0.2);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.saas-info span:not(.saas-status-pill) {
     font-size: 0.75rem;
     color: var(--text-secondary);
     display: block;
@@ -2242,7 +2433,7 @@ section {
 }
 
 .saas-modal-header {
-    padding: 1.5rem 2rem;
+    padding: 1rem 1.5rem;
     background: var(--bg-secondary);
     border-bottom: 1px solid var(--border-color);
     display: flex;
@@ -2253,30 +2444,30 @@ section {
 .saas-modal-title-group {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
 }
 
 .saas-modal-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 12px;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     box-shadow: var(--shadow-md);
 }
 
 .saas-modal-title h2 {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 800;
     margin: 0;
     line-height: 1.2;
 }
 
 .saas-modal-title span {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--text-secondary);
     font-weight: 500;
 }
@@ -2289,7 +2480,7 @@ section {
     transition: color 0.2s;
     background: none;
     border: none;
-    padding: 0.5rem;
+    padding: 0.25rem;
     line-height: 1;
 }
 
@@ -2298,15 +2489,15 @@ section {
 }
 
 .saas-modal-body {
-    padding: 2rem;
+    padding: 1.25rem 1.5rem;
 }
 
 .saas-detail-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     /* Changed to side-by-side for desktop */
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+    gap: 1rem;
+    margin-bottom: 1rem;
 }
 
 .saas-detail-item h4 {
@@ -2367,57 +2558,104 @@ section {
 }
 
 /* ===================================
-   Hero Stats (Moved from About)
+   Hero Stats (Grid Layout)
+   =================================== */
+/* ===================================
+   Hero Stats (Grid Layout)
    =================================== */
 .hero-stats {
-    display: flex;
-    gap: 2rem;
-    margin-top: 2rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* 3 columns by default */
+    gap: 1rem;
+    /* Reduced gap from 1.5rem */
+    margin-top: 1.5rem;
+    /* Reduced from 2.5rem */
     padding-top: 1.5rem;
+    /* Reduced from 2rem */
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.hero-stats .stat-item {
-    text-align: left;
-    padding: 0;
-    background: transparent;
-    box-shadow: none;
-    border-radius: 0;
-    flex: 1;
+.hero-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    /* Reduced gap */
+    padding: 0.75rem;
+    /* Reduced padding from 1rem */
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    /* Slightly tighter radius */
+    transition: all 0.3s ease;
 }
 
-.hero-stats .stat-item:hover {
+.hero-stat-card:hover {
     transform: translateY(-3px);
-    box-shadow: none;
+    /* Subtle hover */
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--primary-color);
+    box-shadow: 0 5px 15px -5px rgba(0, 0, 0, 0.5);
 }
 
-.hero-stats .stat-number {
-    font-size: 2rem;
+.stat-icon-wrapper {
+    width: 40px;
+    /* Reduced from 50px */
+    height: 40px;
+    /* Reduced from 50px */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    font-size: 1.1rem;
+    /* Reduced icon size */
+    color: var(--primary-color);
+    flex-shrink: 0;
+}
+
+.stat-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.hero-stat-card .stat-number {
+    font-size: 1.5rem;
+    /* Reduced from 1.75rem */
     font-weight: 800;
+    color: #fff;
+    line-height: 1.1;
     background: var(--gradient-primary);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin-bottom: 0.25rem;
-    display: block;
 }
 
-.hero-stats .stat-label {
-    font-size: 0.9rem;
+.hero-stat-card .stat-label {
+    font-size: 0.85rem;
     color: var(--text-secondary);
-    font-weight: 500;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
 }
 
-@media (max-width: 768px) {
+/* Responsive Grid */
+@media (max-width: 992px) {
     .hero-stats {
-        justify-content: space-around;
-        text-align: center;
+        grid-template-columns: repeat(2, 1fr);
+        /* 2 columns on tablets */
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-stats {
+        grid-template-columns: 1fr;
+        /* 1 column on mobile */
         gap: 1rem;
     }
 
-    .hero-stats .stat-item {
-        text-align: center;
+    .hero-stat-card {
+        padding: 0.75rem;
     }
 }

@@ -168,7 +168,17 @@ async function fetchData(section) {
 
     // Existing Fetch Logic for other sections
     try {
-        const response = await fetch(`${API_URL}/${section}?include_hidden=true`);
+        let apiUrl = `${API_URL}/${section}`;
+        // Special case for API endpoint naming conventions if any, but currently generic /api/:table works for admin view?
+        // Wait, server.js defines specific GET endpoints like /api/projects etc.
+        // And /api/admin/view/:table is the Generic Admin View endpoint.
+        // Let's use the Admin View endpoint for consistency for admin panel
+
+        apiUrl = `/api/admin/view/${section}`;
+
+        const response = await fetch(apiUrl, {
+            headers: getAuthHeaders()
+        });
         const data = await response.json();
 
         if (data.length === 0) {
@@ -398,6 +408,40 @@ function openModal(section, item = null) {
             ${linkField('Demo Video Link', 'demo_video_link', item?.demo_video_link, item?.demo_video_visible)}
             ${linkField('Live Demo Link', 'live_demo_link', item?.live_demo_link, item?.live_demo_visible)}
             ${fileField('Certificate File', 'certificate_link', item?.certificate_link, item?.certificate_visible)}
+        `;
+    } else if (section === 'micro_saas') {
+        fields = `
+            ${commonFields}
+            <div class="form-group">
+                <label>Subtitle (e.g. Netflix AI Copilot)</label>
+                <input type="text" name="subtitle" value="${item ? item.subtitle : ''}">
+            </div>
+            <div class="form-group">
+                <label>Role</label>
+                <input type="text" name="role" value="${item ? item.role : ''}">
+            </div>
+            <div class="form-group">
+                <label>Status (e.g. Prototype, Concept)</label>
+                <input type="text" name="status" value="${item ? item.status : ''}">
+            </div>
+            <div class="form-group">
+                <label>Description (Enter each bullet point on a new line)</label>
+                <textarea name="description" rows="4">${item ? item.description : ''}</textarea>
+            </div>
+            <div class="form-group">
+                <label>Technologies (Comma separated)</label>
+                <input type="text" name="technologies" value="${item ? item.technologies : ''}">
+            </div>
+            <div class="form-group">
+                <label>Icon Class (e.g. fas fa-play)</label>
+                <input type="text" name="icon_class" value="${item ? item.icon_class : ''}">
+            </div>
+            <div class="form-group">
+                <label>Color Gradient (CSS)</label>
+                <input type="text" name="color_gradient" value="${item ? item.color_gradient : ''}" placeholder="linear-gradient(...)">
+            </div>
+            ${linkField('GitHub/Source Link', 'source_code_link', item?.source_code_link)}
+            ${fileField('Demo Video (Upload or Link)', 'demo_video_link', item?.demo_video_link)}
         `;
     }
 

@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         await loadInternships();
         await loadCertifications();
         await loadAchievements();
+        await loadMicroSaas();
+        await loadStats();
 
         // Re-initialize animations if needed (e.g. AOS)
         if (typeof AOS !== 'undefined') {
@@ -329,58 +331,79 @@ async function loadAchievements() {
 // ===================================
 // Micro-SaaS Showcase Logic
 // ===================================
-const saasProjects = [
-    {
-        title: "StreamFlow",
-        subtitle: "Netflix AI Copilot",
-        role: "Lead Developer & Product Designer",
-        status: "Prototype (MVP)",
-        desc: "Designed and developed a desktop automation ecosystem acting as an intelligent 'Co-pilot' for streaming platforms. Solving the 'choice paralysis' problem, this tool reduces the time-to-content by 90% through mood-based recommendations and autonomous navigation handling.",
-        tech: ["Python", "Selenium", "Tkinter", "OpenCV", "Threading"],
-        icon: "fas fa-play",
-        color: "linear-gradient(135deg, #E50914, #B81D24)"
-    },
-    {
-        title: "RecruitAI",
-        subtitle: "Smart Hiring Assistant",
-        role: "Full Stack Developer",
-        status: "Beta Testing",
-        desc: "An AI-powered recruitment platform that automates resume screening, schedules interviews, and provides candidate insights using NLP. Reduces hiring time by 40% and improves candidate matching accuracy.",
-        tech: ["Python", "FastAPI", "React", "NLP", "PostgreSQL"],
-        icon: "fas fa-robot",
-        color: "linear-gradient(135deg, #0077B5, #00A0DC)"
-    },
-    {
-        title: "DocuMind",
-        subtitle: "Intelligent Document Analysis",
-        role: "AI Engineer",
-        status: "Concept",
-        desc: "A document processing SaaS that uses OCR and LLMs to extract, summarize, and query information from legal and financial documents instantly, transforming unstructured data into actionable insights.",
-        tech: ["Python", "Tesseract", "Transformers", "Flask", "React"],
-        icon: "fas fa-file-invoice",
-        color: "linear-gradient(135deg, #10B981, #34D399)"
-    },
-    {
-        title: "FinTrack",
-        subtitle: "Personal Finance Analytics",
-        role: "Solutions Architect",
-        status: "Development",
-        desc: "A personal finance management tool that aggregates bank transactions, categorizes expenses using ML, and provides predictive budget insights to help users achieve financial goals.",
-        tech: ["Node.js", "Express", "MongoDB", "Chart.js", "ML.NET"],
-        icon: "fas fa-chart-pie",
-        color: "linear-gradient(135deg, #F59E0B, #FBBF24)"
-    },
-    {
-        title: "EdSync",
-        subtitle: "Smart Learning Platform",
-        role: "Lead Developer",
-        status: "Ideation",
-        desc: "An adaptive learning platform that customizes study plans based on student performance and learning pace. Features real-time progress tracking and resource recommendations.",
-        tech: ["Vue.js", "Firebase", "Python", "Sklearn"],
-        icon: "fas fa-graduation-cap",
-        color: "linear-gradient(135deg, #8B5CF6, #A78BFA)"
-    }
-];
+// 6. Load Micro-SaaS
+let saasProjects = [];
+
+async function loadMicroSaas() {
+    try {
+        const response = await fetch('/api/micro-saas');
+        saasProjects = await response.json();
+        const container = document.querySelector('.saas-list');
+        if (!container || !saasProjects.length) return;
+
+        container.innerHTML = saasProjects.map((project, index) => {
+            // Only show first 3 items as "Featured" if desired, or all if preferred.
+            // Based on user request "keep 3 only", we can slice or just render what the API returns (and let DB/User control visibility/limit)
+            // But user said "make featured, 3 only keep" - so let's respect the API return (assuming API returns what is needed)
+            // The API returns everything. Better to limit to 3 here or in API.
+            // Let's render all that come from API, assuming admin controls visibility.
+
+            // Wait, we need to map the "tech" array correctly as it might be a string in DB
+            const techStack = typeof project.technologies === 'string' ? project.technologies.split(',').map(t => t.trim()) : project.technologies;
+            // Store cleaned tech back for modal use
+            saasProjects[index].tech = techStack;
+            saasProjects[index].desc = project.description;
+            saasProjects[index].icon = project.icon_class;
+            saasProjects[index].color = project.color_gradient;
+
+            const boxShadowColor = project.color_gradient.match(/#[A-Fa-f0-9]{6}/g)?.[0] || '#000';
+            // Convert hex to rgba for shadow
+            const hexToRgba = (hex) => {
+                const r = parseInt(hex.slice(1, 3), 16);
+                const g = parseInt(hex.slice(3, 5), 16);
+                const b = parseInt(hex.slice(5, 7), 16);
+                return `rgba(${r}, ${g}, ${b}, 0.4)`;
+            }
+            const shadow = `0 4px 15px ${hexToRgba(boxShadowColor)}`;
+
+            // Active class for first item by default? Maybe not.
+            // Let's add active-saas to the first one only.
+            const activeClass = index === 0 ? 'active-saas' : '';
+
+            let statusClass = 'saas-status-default';
+            const statusLower = (project.status || '').toLowerCase();
+
+            if (statusLower.includes('development') || statusLower.includes('building')) {
+                statusClass = 'saas-status-dev';
+            } else if (statusLower.includes('prototype') || statusLower.includes('mvp')) {
+                statusClass = 'saas-status-prototype';
+            } else if (statusLower.includes('concept') || statusLower.includes('idea')) {
+                statusClass = 'saas-status-concept';
+            } else if (statusLower.includes('beta') || statusLower.includes('live')) {
+                statusClass = 'saas-status-live';
+            }
+
+            return `
+            <div class="saas-item ${activeClass}" onclick="openSaasModal(${index})">
+                <div class="saas-icon" style="background: ${project.color_gradient}; box-shadow: ${shadow};">
+                    <i class="${project.icon_class}"></i>
+                </div>
+                <div class="saas-info">
+                    <div class="saas-title-row">
+                        <h4>${project.title}</h4>
+                        <span class="saas-status-pill ${statusClass}">${project.status}</span>
+                    </div>
+                    <span>${project.subtitle}</span>
+                </div>
+                <div class="saas-arrow">
+                    <i class="fas fa-chevron-right"></i>
+                </div>
+            </div>
+            `;
+        }).join('');
+
+    } catch (e) { console.error('Error loading Micro-SaaS', e); }
+}
 
 window.openSaasModal = function (index) {
     const project = saasProjects[index];
@@ -389,18 +412,43 @@ window.openSaasModal = function (index) {
     // Update Modal Content
     document.getElementById('saasModalTitle').innerText = project.title;
     document.getElementById('saasModalSubtitle').innerText = project.subtitle;
-    document.getElementById('saasModalDesc').innerText = project.desc;
+    // Convert description to bullet points if it contains newlines, otherwise just show text
+    const descText = project.description || project.desc;
+    const descContainer = document.getElementById('saasModalDesc');
+
+    if (descText && descText.includes('\n')) {
+        const listItems = descText.split('\n').filter(line => line.trim() !== '').map(line => `<li>${line.trim().replace(/^•\s*/, '')}</li>`).join('');
+        descContainer.innerHTML = `<ul style="list-style-type: disc; padding-left: 20px; margin-top: 10px; text-align: left;">${listItems}</ul>`;
+    } else {
+        descContainer.innerHTML = `<p>${descText}</p>`;
+    }
     document.getElementById('saasModalRole').innerText = project.role;
     document.getElementById('saasModalStatus').innerText = project.status;
 
     // Icon
     const iconContainer = document.getElementById('saasModalIcon');
-    iconContainer.innerHTML = `<i class="${project.icon}"></i>`;
-    iconContainer.style.background = project.color;
+    iconContainer.innerHTML = `<i class="${project.icon_class || project.icon}"></i>`;
+    iconContainer.style.background = project.color_gradient || project.color;
 
     // Tech Stack
     const techContainer = document.getElementById('saasModalTech');
-    techContainer.innerHTML = project.tech.map(t => `<span class="saas-tech">${t}</span>`).join('');
+    let techs = project.tech || project.technologies;
+    if (typeof techs === 'string') techs = techs.split(',');
+
+    techContainer.innerHTML = techs.map(t => {
+        const techName = t.trim();
+        const iconClass = getTechIcon(techName); // Helper function
+        return `<span class="saas-tech"><i class="${iconClass}"></i> ${techName}</span>`;
+    }).join('');
+
+    // Reset Video
+    const videoContainer = document.getElementById('saasModalVideoContainer');
+    const videoPlayer = document.getElementById('saasModalVideo');
+    if (videoContainer) videoContainer.style.display = 'none';
+    if (videoPlayer) {
+        videoPlayer.pause();
+        videoPlayer.src = '';
+    }
 
     // Show Modal
     const modal = document.getElementById('saasModal');
@@ -412,10 +460,70 @@ window.openSaasModal = function (index) {
         if (i === index) item.classList.add('active-saas');
         else item.classList.remove('active-saas');
     });
+
+    // Actions Footer
+    const footer = document.getElementById('saasModalFooter');
+    let buttonsHtml = '';
+
+    if (project.source_code_link) {
+        buttonsHtml += `<a href="${project.source_code_link}" target="_blank" class="btn btn-secondary"><i class="fab fa-github"></i> GitHub</a>`;
+    }
+
+    if (project.demo_video_link) {
+        // We use a button to trigger the video play in the modal
+        buttonsHtml += `<button class="btn btn-primary" onclick="playSaasVideo('${project.demo_video_link}')"><i class="fas fa-play"></i> Demo Video</button>`;
+    }
+
+    buttonsHtml += `<button class="btn btn-secondary" onclick="closeSaasModal()">Close</button>`;
+    footer.innerHTML = buttonsHtml;
+}
+
+// Helper to get icons for tech
+function getTechIcon(tech) {
+    const t = tech.toLowerCase();
+    if (t.includes('react')) return 'fab fa-react';
+    if (t.includes('node')) return 'fab fa-node-js';
+    if (t.includes('js') || t.includes('javascript')) return 'fab fa-js';
+    if (t.includes('python')) return 'fab fa-python';
+    if (t.includes('html')) return 'fab fa-html5';
+    if (t.includes('css')) return 'fab fa-css3-alt';
+    if (t.includes('java')) return 'fab fa-java';
+    if (t.includes('php')) return 'fab fa-php';
+    if (t.includes('aws')) return 'fab fa-aws';
+    if (t.includes('docker')) return 'fab fa-docker';
+    if (t.includes('git')) return 'fab fa-git-alt';
+    if (t.includes('database') || t.includes('sql') || t.includes('mongo')) return 'fas fa-database';
+    if (t.includes('chart')) return 'fas fa-chart-pie';
+    if (t.includes('ai') || t.includes('ml') || t.includes('brain')) return 'fas fa-brain';
+    if (t.includes('api')) return 'fas fa-plug';
+    if (t.includes('scraping') || t.includes('selenium')) return 'fas fa-robot';
+
+    return 'fas fa-code'; // Default
+}
+
+window.playSaasVideo = function (videoPath) {
+    const videoContainer = document.getElementById('saasModalVideoContainer');
+    const videoPlayer = document.getElementById('saasModalVideo');
+
+    if (videoContainer && videoPlayer) {
+        videoPlayer.src = videoPath;
+        videoContainer.style.display = 'block';
+        videoPlayer.play();
+        // Scroll to video
+        videoContainer.scrollIntoView({ behavior: 'smooth' });
+    }
 }
 
 window.closeSaasModal = function () {
     const modal = document.getElementById('saasModal');
+
+    // Stop video
+    const videoPlayer = document.getElementById('saasModalVideo');
+    if (videoPlayer) {
+        videoPlayer.pause();
+        videoPlayer.currentTime = 0;
+    }
+
     modal.classList.remove('show');
     setTimeout(() => {
         modal.style.display = 'none';
@@ -429,3 +537,33 @@ window.addEventListener('click', (e) => {
         closeSaasModal();
     }
 });
+
+async function loadStats() {
+    try {
+        const response = await fetch('/api/stats');
+        const stats = await response.json();
+
+        const projectCountEl = document.getElementById('project-count');
+        const internshipCountEl = document.getElementById('internship-count');
+        const hackathonCountEl = document.getElementById('hackathon-count');
+        const certCountEl = document.getElementById('cert-count');
+        const saasCountEl = document.getElementById('saas-count');
+
+        // CGPA is now the one inside the specific card, or we can add an ID to it in HTML?
+        // Let's use the ID-less selector as fallback or just add ID in HTML if we were editing it fully.
+        // But for now, user didn't ask to change CGPA logic, just add others.
+        // Wait, I should probably check if I can add an ID to CGPA too in index.html for robustness? 
+        // No, let's stick to the selector unless it breaks.
+        const cgpaEl = document.querySelector('.hero-stat-card:nth-child(3) .stat-number');
+
+        if (projectCountEl) projectCountEl.innerText = stats.projects + '+';
+        if (internshipCountEl) internshipCountEl.innerText = stats.internships;
+        if (hackathonCountEl) hackathonCountEl.innerText = stats.hackathons;
+        if (certCountEl) certCountEl.innerText = stats.certifications;
+        if (saasCountEl) saasCountEl.innerText = stats.saas;
+        if (cgpaEl) cgpaEl.innerText = stats.cgpa;
+
+    } catch (e) {
+        console.error('Error loading stats:', e);
+    }
+}

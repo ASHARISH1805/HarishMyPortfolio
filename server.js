@@ -18,10 +18,42 @@ app.use(express.static(path.join(__dirname))); // Serve current folder
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Serve uploads folder
 
 // Configure Multer
-// Configure Multer (Memory Storage for Base64 conversion)
-const storage = multer.memoryStorage();
+// Configure Multer (Disk Storage)
+const fs = require('fs');
+const uploadDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir);
+}
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/')
+    },
+    filename: function (req, file, cb) {
+        // Sanitize filename and add timestamp
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const ext = path.extname(file.originalname);
+        cb(null, file.fieldname + '-' + uniqueSuffix + ext)
+    }
+});
 
 const upload = multer({ storage: storage });
+
+// ... (other routes) ...
+
+// Upload Endpoint
+app.post('/api/admin/upload', upload.single('file'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    // Return the path relative to the server root
+    // Note: since we use diskStorage, req.file.path will be something like 'uploads\\filename...' on Windows.
+    // We want a web-accessible URL.
+    const webPath = 'uploads/' + req.file.filename;
+
+    res.json({ filePath: webPath });
+});
 
 // ================= API ROUTES =================
 
@@ -90,6 +122,61 @@ app.get('/api/achievements', async (req, res) => {
             : 'SELECT * FROM achievements WHERE is_visible = TRUE ORDER BY display_order ASC';
         const result = await db.query(query);
         res.json(result.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// 6. GET Micro-SaaS
+app.get('/api/micro-saas', async (req, res) => {
+    try {
+        const query = req.query.include_hidden === 'true'
+            ? 'SELECT * FROM micro_saas ORDER BY display_order ASC'
+            : 'SELECT * FROM micro_saas WHERE is_visible = TRUE ORDER BY display_order ASC';
+        const result = await db.query(query);
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// 7. GET Stats (For Hero Section)
+app.get('/api/stats', async (req, res) => {
+    try {
+        const projectCount = await db.query('SELECT COUNT(*) FROM projects WHERE is_visible = TRUE');
+        const internshipCount = await db.query('SELECT COUNT(*) FROM internships WHERE is_visible = TRUE');
+
+        // Hackathons (Achievements with category 'Hackathon')
+        // Note: category column was added recently, make sure to handle case if some don't have it or fallback
+        const hackathonCount = await db.query("SELECT COUNT(*) FROM achievements WHERE category = 'Hackathon' AND is_visible = TRUE");
+
+        // Certifications
+        const certCount = await db.query('SELECT COUNT(*) FROM certifications WHERE is_visible = TRUE');
+
+        // Micro-SaaS
+        const saasCount = await db.query('SELECT COUNT(*) FROM micro_saas WHERE is_visible = TRUE');
+
+        // Fetch CGPA from achievements if possible, or use a default/hardcoded strategy if not found.
+        // We'll look for an achievement with title 'Academic Performance' or 'CGPA'
+        const cgpaRes = await db.query("SELECT role FROM achievements WHERE title ILIKE '%Academic%' OR title ILIKE '%CGPA%' LIMIT 1");
+
+        let cgpa = '7.5'; // Default
+        if (cgpaRes.rows.length > 0) {
+            // Extract number from string like "7.47 CGPA"
+            const match = cgpaRes.rows[0].role.match(/[\d.]+/);
+            if (match) cgpa = match[0];
+        }
+
+        res.json({
+            projects: parseInt(projectCount.rows[0].count),
+            internships: parseInt(internshipCount.rows[0].count),
+            hackathons: parseInt(hackathonCount.rows[0].count),
+            certifications: parseInt(certCount.rows[0].count),
+            saas: parseInt(saasCount.rows[0].count),
+            cgpa: cgpa
+        });
     } catch (err) {
         console.error(err);
         res.status(500).json({ error: 'Server error' });
@@ -244,7 +331,7 @@ app.use('/api/admin', authMiddleware);
 // Backup Endpoint - Exports all data
 app.get('/api/admin/backup', async (req, res) => {
     try {
-        const tables = ['skills', 'projects', 'internships', 'certifications', 'achievements', 'messages'];
+        const tables = ['skills', 'projects', 'internships', 'certifications', 'achievements', 'messages', 'micro_saas'];
         const backupData = {};
 
         for (const table of tables) {
@@ -267,7 +354,7 @@ app.get('/api/admin/backup', async (req, res) => {
 // View Endpoint (GET data for admin)
 app.get('/api/admin/view/:table', async (req, res) => {
     const { table } = req.params;
-    const allowedTables = ['skills', 'projects', 'internships', 'certifications', 'achievements', 'messages'];
+    const allowedTables = ['skills', 'projects', 'internships', 'certifications', 'achievements', 'messages', 'micro_saas'];
     if (!allowedTables.includes(table)) {
         return res.status(400).json({ error: 'Invalid table name' });
     }
@@ -275,7 +362,7 @@ app.get('/api/admin/view/:table', async (req, res) => {
     try {
         let query = `SELECT * FROM ${table} ORDER BY id ASC`;
         // For ordered tables, respect display_order
-        if (['skills', 'projects', 'internships', 'certifications', 'achievements'].includes(table)) {
+        if (['skills', 'projects', 'internships', 'certifications', 'achievements', 'micro_saas'].includes(table)) {
             query = `SELECT * FROM ${table} ORDER BY display_order ASC`;
         }
         // Messages order by date
@@ -296,7 +383,7 @@ app.post('/api/admin/save', async (req, res) => {
     const { table, id, ...data } = req.body;
 
     // Whitelist allowed tables to prevent SQL injection
-    const allowedTables = ['skills', 'projects', 'internships', 'certifications', 'achievements'];
+    const allowedTables = ['skills', 'projects', 'internships', 'certifications', 'achievements', 'micro_saas'];
     if (!allowedTables.includes(table)) {
         return res.status(400).json({ error: 'Invalid table name' });
     }
@@ -307,7 +394,8 @@ app.post('/api/admin/save', async (req, res) => {
         projects: ['title', 'description', 'technologies', 'source_code_link', 'demo_video_link', 'live_demo_link', 'display_order', 'is_visible', 'is_featured', 'icon_class', 'source_code_visible', 'demo_video_visible', 'live_demo_visible', 'certificate_link', 'certificate_visible', 'project_image_path'],
         internships: ['title', 'company', 'period', 'description', 'technologies', 'source_code_link', 'demo_video_link', 'live_demo_link', 'display_order', 'is_visible', 'icon_class', 'source_code_visible', 'demo_video_visible', 'live_demo_visible', 'certificate_link', 'certificate_visible'],
         certifications: ['title', 'issuer', 'date_issued', 'description', 'certificate_image_path', 'display_order', 'is_visible', 'icon_class', 'certificate_visible', 'verify_link'],
-        achievements: ['title', 'role', 'description', 'source_code_link', 'demo_video_link', 'live_demo_link', 'display_order', 'is_visible', 'icon_class', 'source_code_visible', 'demo_video_visible', 'live_demo_visible', 'certificate_link', 'certificate_visible']
+        achievements: ['title', 'role', 'description', 'source_code_link', 'demo_video_link', 'live_demo_link', 'display_order', 'is_visible', 'icon_class', 'source_code_visible', 'demo_video_visible', 'live_demo_visible', 'certificate_link', 'certificate_visible'],
+        micro_saas: ['title', 'subtitle', 'role', 'status', 'description', 'technologies', 'icon_class', 'color_gradient', 'display_order', 'is_visible', 'source_code_link', 'demo_video_link']
     };
 
     const tableColumns = validColumns[table];
@@ -323,6 +411,14 @@ app.post('/api/admin/save', async (req, res) => {
         } else {
             console.log(`Ignoring invalid column '${key}' for table '${table}'`);
         }
+    }
+
+    if (table === 'micro_saas') {
+        console.log('--- Debug Micro-SaaS Save ---');
+        console.log('Incoming Data:', data);
+        console.log('Valid Columns:', tableColumns);
+        console.log('Filtered Data:', filteredData);
+        console.log('-----------------------------');
     }
 
     // Use filteredData instead of data
@@ -379,7 +475,7 @@ app.post('/api/admin/save', async (req, res) => {
 // Delete Endpoint
 app.delete('/api/admin/delete/:table/:id', async (req, res) => {
     const { table, id } = req.params;
-    const allowedTables = ['skills', 'projects', 'internships', 'certifications', 'achievements'];
+    const allowedTables = ['skills', 'projects', 'internships', 'certifications', 'achievements', 'micro_saas'];
 
     if (!allowedTables.includes(table)) {
         return res.status(400).json({ error: 'Invalid table name' });
@@ -397,7 +493,7 @@ app.delete('/api/admin/delete/:table/:id', async (req, res) => {
 // Reorder Endpoint
 app.post('/api/admin/reorder', async (req, res) => {
     const { table, orderedIds } = req.body;
-    const allowedTables = ['skills', 'projects', 'internships', 'certifications', 'achievements'];
+    const allowedTables = ['skills', 'projects', 'internships', 'certifications', 'achievements', 'micro_saas'];
 
     if (!allowedTables.includes(table)) {
         return res.status(400).json({ error: 'Invalid table name' });
@@ -423,21 +519,7 @@ app.post('/api/admin/reorder', async (req, res) => {
     }
 });
 
-// Upload Endpoint
-app.post('/api/admin/upload', upload.single('file'), (req, res) => {
-    if (!req.file) {
-        return res.status(400).json({ error: 'No file uploaded' });
-    }
-
-    // Convert buffer to Base64
-    const b64 = Buffer.from(req.file.buffer).toString('base64');
-    const mimeType = req.file.mimetype; // e.g., image/png
-    const dataURI = `data:${mimeType};base64,${b64}`;
-
-    // Return the Base64 Data URI as the "filePath"
-    // The frontend/database will treat it as a string URL, but it's actually the image data.
-    res.json({ filePath: dataURI });
-});
+// (Upload endpoint moved to top configuration)
 
 // ================= DATABASE AUTO-MIGRATION =================
 async function ensureSchema() {
@@ -482,6 +564,24 @@ async function ensureSchema() {
 
         // Skills Icon
         await db.query(`ALTER TABLE skills ADD COLUMN IF NOT EXISTS icon_class VARCHAR(50) DEFAULT 'fas fa-code'`);
+
+        // Micro-SaaS Table
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS micro_saas (
+                id SERIAL PRIMARY KEY,
+                title VARCHAR(255) NOT NULL,
+                subtitle VARCHAR(255),
+                role VARCHAR(255),
+                status VARCHAR(100),
+                description TEXT,
+                technologies TEXT,
+                icon_class VARCHAR(100),
+                color_gradient VARCHAR(255),
+                display_order INTEGER DEFAULT 0,
+                is_visible BOOLEAN DEFAULT TRUE,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
 
         console.log('✅ Database Schema Verified.');
     } catch (err) {
