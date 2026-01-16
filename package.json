@@ -2,7 +2,7 @@
   "name": "ai-data-science-portfolio",
   "version": "1.0.0",
   "description": "Professional AI & Data Science Portfolio",
-  "main": "index.html",
+  "main": "server.js",
   "scripts": {
     "start": "node deploy_db.js && node server.js"
   },

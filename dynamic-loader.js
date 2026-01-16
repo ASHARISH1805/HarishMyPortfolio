@@ -395,8 +395,10 @@ async function loadMicroSaas() {
                     </div>
                     <span>${project.subtitle}</span>
                 </div>
-                <div class="saas-arrow">
-                    <i class="fas fa-chevron-right"></i>
+                
+                <div class="saas-quick-links right-aligned">
+                    ${project.source_code_link ? `<a href="${project.source_code_link}" target="_blank" class="saas-mini-btn github-color" onclick="event.stopPropagation()" title="View Source"><i class="fab fa-github"></i></a>` : ''}
+                    ${project.demo_video_link ? `<a href="${project.demo_video_link}" target="_blank" class="saas-mini-btn demo-color" onclick="event.stopPropagation()" title="Live Demo"><i class="fas fa-external-link-alt"></i></a>` : ''}
                 </div>
             </div>
             `;
@@ -470,8 +472,8 @@ window.openSaasModal = function (index) {
     }
 
     if (project.demo_video_link) {
-        // We use a button to trigger the video play in the modal
-        buttonsHtml += `<button class="btn btn-primary" onclick="playSaasVideo('${project.demo_video_link}')"><i class="fas fa-play"></i> Demo Video</button>`;
+        // Render as a standard link button
+        buttonsHtml += `<a href="${project.demo_video_link}" target="_blank" class="btn btn-primary"><i class="fas fa-external-link-alt"></i> Live Demo</a>`;
     }
 
     buttonsHtml += `<button class="btn btn-secondary" onclick="closeSaasModal()">Close</button>`;
