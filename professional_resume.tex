@@ -1,0 +1,288 @@
+%-----------------------------------------------------------------------------------------------------------------------------------------------%
+%	The MIT License (MIT)
+%
+%	Copyright (c) 2024 Harish A.S
+%
+%	Permission is hereby granted, free of charge, to any person obtaining a copy
+%	of this software and associated documentation files (the "Software"), to deal
+%	in the Software without restriction, including without limitation the rights
+%	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+%	copies of the Software, and to permit persons to whom the Software is
+%	furnished to do so, subject to the following conditions:
+%	
+%	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+%	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+%	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+%	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+%	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+%	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+%	THE SOFTWARE.
+%	
+%
+%-----------------------------------------------------------------------------------------------------------------------------------------------%
+
+%----------------------------------------------------------------------------------------
+%	DOCUMENT DEFINITION
+%----------------------------------------------------------------------------------------
+
+\documentclass[a4paper,11pt]{article}
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES
+%----------------------------------------------------------------------------------------
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage{marvosym}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{verbatim}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage{fontawesome5}
+\usepackage{multicol}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, calc}
+
+% Define Custom Colors
+\definecolor{saasRed}{HTML}{DC2626}
+\definecolor{saasBlue}{HTML}{2563EB}
+\definecolor{saasGreen}{HTML}{059669}
+\definecolor{saasOrange}{HTML}{D97706}
+\definecolor{saasTeal}{HTML}{0891B2}
+\definecolor{saasPurple}{HTML}{7C3AED}
+
+% Custom Commands for Design
+\newcommand{\saasIcon}[2]{%
+    \tikz[baseline=-0.3em]{
+        \node[fill=#2, rounded corners=4pt, inner sep=4pt, minimum width=2.2em, minimum height=2.2em, anchor=base] {\textcolor{white}{\large #1}};
+    }%
+}
+
+\newcommand{\saasBadge}[2]{%
+    \tikz[baseline=-0.1em]{
+        \node[draw=#2, text=#2, fill=#2!5, rounded corners=3pt, inner sep=2.5pt, font=\scriptsize\bfseries] {\strut #1};
+    }%
+}
+\setlength{\multicolsep}{-3.0pt}
+\setlength{\columnsep}{-1pt}
+\input{glyphtounicode}
+
+
+%----------------------------------------------------------------------------------------
+%	FONT OPTIONS
+%----------------------------------------------------------------------------------------
+% sans-serif
+% \usepackage[sfdefault]{FiraSans}
+% \usepackage[sfdefault]{roboto}
+% \usepackage[sfdefault]{noto-sans}
+% \usepackage[default]{sourcesanspro}
+
+% serif
+% \usepackage{CormorantGaramond}
+% \usepackage{charter}
+
+
+\pagestyle{fancy}
+\fancyhf{} % clear all header and footer fields
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% Adjust margins
+\addtolength{\oddsidemargin}{-0.6in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1.19in}
+\addtolength{\topmargin}{-.7in}
+\addtolength{\textheight}{1.4in}
+
+\urlstyle{same}
+
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+% Sections formatting
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large\bfseries
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+% Ensure that generate pdf is machine readable/ATS parsable
+\pdfgentounicode=1
+
+%----------------------------------------------------------------------------------------
+%	CUSTOM COMMANDS
+%----------------------------------------------------------------------------------------
+\newcommand{\resumeItem}[1]{
+  \item\small{
+    {#1 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\classesList}[4]{
+    \item\small{
+        {#1 #2 #3 #4 \vspace{-2pt}}
+  }
+}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{1.0\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & \textbf{\small #2} \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubSubheading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \textit{\small#1} & \textit{\small #2} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{1.001\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & \textbf{\small #2}\\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
+
+\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.0in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+%----------------------------------------------------------------------------------------
+%	CV / RESUME STARTS HERE
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+%----------HEADING----------
+\begin{center}
+    {\Huge \scshape Harish A.S} \\ \vspace{5pt}
+    \textbf{AI \& Data Science Engineer | Vibe Coder} \\ \vspace{5pt}
+    \small \raisebox{-0.1em}{\faPhone} +91 83282 33110 ~ \href{mailto:anandhunharish@gmail.com}{\raisebox{-0.2em}{\faEnvelope}\  anandhunharish@gmail.com} ~ 
+    \href{https://linkedin.com/in/asharish}{\raisebox{-0.2em}{\faLinkedin}\ linkedin.com/in/asharish}  ~
+    \href{https://github.com/asharish1805}{\raisebox{-0.2em}{\faGithub}\ github.com/asharish1805}
+    \vspace{-8pt}
+\end{center}
+
+
+%-----------EDUCATION-----------
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {St. Joseph's Institute of Technology}{Chennai, India}
+      {Bachelor of Engineering in Artificial Intelligence and Data Science}{2021 -- 2025}
+      \resumeItemListStart
+        \resumeItem{CGPA: 7.47/10}
+        \resumeItem{Relevant Coursework: Machine Learning, Deep Learning, Data Structures, Algorithms, DBMS, Python Programming.}
+      \resumeItemListEnd
+  \resumeSubHeadingListEnd
+
+%-----------EXPERIENCE-----------
+\section{Experience}
+  \resumeSubHeadingListStart
+
+    \resumeSubheading
+      {Company Name (Example: Tech Solutions)}{Location}
+      {Role (e.g., Data Science Intern)}{Month Year -- Month Year}
+      \resumeItemListStart
+        \resumeItem{Developed and optimized machine learning models for [Specific Task], improving accuracy by [X]\%.}
+        \resumeItem{Collaborated with cross-functional teams to integrate AI solutions into existing products.}
+        \resumeItem{Automated data preprocessing pipelines using Python (Pandas, NumPy), reducing manual effort by [Y]\%.}
+      \resumeItemListEnd
+      
+    \resumeSubheading
+      {Another Company}{Location}
+      {Role (e.g., Web Developer Intern)}{Month Year -- Month Year}
+      \resumeItemListStart
+        \resumeItem{Built responsive web interfaces using HTML, CSS, JavaScript, and React.}
+        \resumeItem{Implemented RESTful APIs and ensured seamless communication between frontend and backend.}
+      \resumeItemListEnd
+
+  \resumeSubHeadingListEnd
+
+
+%-----------MICRO-SAAS & PROJECTS-----------
+%-----------MICRO-SAAS PRODUCTS-----------
+\section{My Micro-SaaS Products}
+    \vspace{-4pt}
+    {\small \tikz[baseline=-0.2em]{\node[fill=saasTeal, rounded corners=3pt, inner sep=3pt, text=white, font=\bfseries\tiny] {FEATURED};} \hspace{0.3em} \textit{Next-Gen Tools Built for Scale}}
+    \vspace{2pt}
+
+    \begin{itemize}[leftmargin=0in, label={}]
+      
+      % StreamFlow
+      \item
+        \begin{tabular}{@{}c@{\hspace{0.6em}}p{0.93\textwidth}@{}}
+           \saasIcon{\faPlay}{saasRed} & 
+           {\textbf{\large StreamFlow} \hspace{0.2em} \saasBadge{PROTOTYPE (MVP)}{saasBlue} \hfill \href{https://github.com/asharish1805}{\footnotesize \faGithub\ Source} \hspace{5pt} \href{#}{\footnotesize \faVideo\ Demo}} \\[-4pt]
+           & {\small \textit{Netflix AI Copilot}} \\[-1pt]
+           & {\small Built a desktop 'Micro-SaaS' application to automate streaming workflows, reducing user interaction time by 90\%. Engineered a Computer Vision layer (OpenCV) to autonomously detect and click dynamic UI elements. Developed a custom recommendation engine mapping user moods to content queries using complex logic.}
+        \end{tabular}
+        \vspace{2pt}
+
+      % RecruitAI
+      \item
+        \begin{tabular}{@{}c@{\hspace{0.6em}}p{0.93\textwidth}@{}}
+           \saasIcon{\faRobot}{saasBlue} & 
+           {\textbf{\large RecruitAI} \hspace{0.2em} \saasBadge{BETA TESTING}{saasGreen} \hfill \href{https://github.com/asharish1805}{\footnotesize \faGithub\ Source} \hspace{5pt} \href{#}{\footnotesize \faVideo\ Demo}} \\[-4pt]
+           & {\small \textit{Smart Hiring Assistant}} \\[-1pt]
+           & {\small Designed an AI-driven recruitment assistant to screen resumes and match candidates to job descriptions. Utilized Natural Language Processing (NLP) to extract key skills and rank applicants automatically.}
+        \end{tabular}
+        \vspace{2pt}
+        
+      % DocuMind
+      \item
+        \begin{tabular}{@{}c@{\hspace{0.6em}}p{0.93\textwidth}@{}}
+           \saasIcon{\faFileAlt}{saasGreen} & 
+           {\textbf{\large DocuMind} \hspace{0.2em} \saasBadge{CONCEPT}{saasPurple} \hfill \href{https://github.com/asharish1805}{\footnotesize \faGithub\ Source} \hspace{5pt} \href{#}{\footnotesize \faVideo\ Demo}} \\[-4pt]
+           & {\small \textit{Intelligent Document Analysis}} \\[-1pt]
+           & {\small Conceptualized an intelligent document processing engine utilizing OCR and Large Language Models. Designed architecture for automated data extraction from unstructured PDF and image files.}
+        \end{tabular}
+        \vspace{2pt}
+
+      % FinTrack
+      \item
+        \begin{tabular}{@{}c@{\hspace{0.6em}}p{0.93\textwidth}@{}}
+           \saasIcon{\faChartPie}{saasOrange} & 
+           {\textbf{\large FinTrack} \hspace{0.2em} \saasBadge{DEVELOPMENT}{saasOrange} \hfill \href{https://github.com/asharish1805}{\footnotesize \faGithub\ Source} \hspace{5pt} \href{#}{\footnotesize \faVideo\ Demo}} \\[-4pt]
+           & {\small \textit{Personal Finance Analytics}} \\[-1pt]
+           & {\small Architected a finance tool aggregating data from multiple accounts with automated expense categorization. Developed ML models to categorize transaction expenses automatically with 90\% precision. Created predictive budget insights helping users forecast savings based on spending habits.}
+        \end{tabular}
+
+    \end{itemize}
+
+
+%-----------SKILLS-----------
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{Languages}{: Python, JavaScript, Java, SQL, HTML/CSS} \\
+     \textbf{Frameworks/Libraries}{: React, Node.js, Express, Flask, Pandas, NumPy, Scikit-learn, TensorFlow/Keras, OpenCV} \\
+     \textbf{Tools/Platforms}{: Git, GitHub, Docker, AWS (Basic), VS Code, Jupyter Notebooks} \\
+     \textbf{Concepts}{: Data Structures \& Algorithms, Machine Learning, Deep Learning, REST APIs, OOP, Database Management}
+    }}
+ \end{itemize}
+
+
+%-----------ACHIEVEMENTS & CERTIFICATIONS-----------
+\section{Achievements \& Certifications}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \resumeItem{Won \textbf{3 Hackathons} including [Name of Hackathon] for developing innovative solutions.}
+    \resumeItem{Completed \textbf{12+ Certifications} in AI, Data Science, and Full Stack Development from platforms like Coursera and Udemy.}
+    \resumeItem{Recognized as a \textbf{Vibe Coder} for creative problem solving and rapid prototyping.}
+ \end{itemize}
+
+
+%-------------------------------------------
+\end{document}

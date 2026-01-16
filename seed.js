@@ -264,6 +264,60 @@ async function seedData() {
                     image: 'certificates/c-programming-cert.jpg',
                     icon: 'fas fa-graduation-cap',
                     order: 6
+                },
+                {
+                    title: 'Deep Learning Specialization',
+                    issuer: 'DeepLearning.AI',
+                    date: '2025',
+                    description: 'Mastered neural networks, CNNs, RNNs, and hyperparameter tuning.',
+                    image: 'certificates/dl-specialization.jpg',
+                    icon: 'fas fa-brain',
+                    order: 7
+                },
+                {
+                    title: 'Google Cloud Professional Architect',
+                    issuer: 'Google Cloud',
+                    date: '2025',
+                    description: 'Designed scalable and reliable cloud infrastructure solutions on GCP.',
+                    image: 'certificates/gcp-architect.jpg',
+                    icon: 'fas fa-cloud',
+                    order: 8
+                },
+                {
+                    title: 'Full Stack Web Development',
+                    issuer: 'Udemy',
+                    date: '2024',
+                    description: 'Comprehensive boot camp covering React, Node.js, Express, and MongoDB.',
+                    image: 'certificates/fullstack-bootcamp.jpg',
+                    icon: 'fas fa-laptop-code',
+                    order: 9
+                },
+                {
+                    title: 'Advanced Data Structures & Algorithms',
+                    issuer: 'Coursera',
+                    date: '2024',
+                    description: 'In-depth study of graph algorithms, dynamic programming, and data structure optimization.',
+                    image: 'certificates/dsa-advanced.jpg',
+                    icon: 'fas fa-code-branch',
+                    order: 10
+                },
+                {
+                    title: 'Cyber Security Fundamentals',
+                    issuer: 'CompTIA',
+                    date: '2024',
+                    description: 'Understanding of network security, threat management, and cryptography.',
+                    image: 'certificates/comptia-security.jpg',
+                    icon: 'fas fa-user-secret',
+                    order: 11
+                },
+                {
+                    title: 'Agile Project Management',
+                    issuer: 'Google',
+                    date: '2024',
+                    description: 'Learned Agile methodologies, Scrum framework, and effective team collaboration strategies.',
+                    image: 'certificates/agile-pm.jpg',
+                    icon: 'fas fa-tasks',
+                    order: 12
                 }
             ];
 
@@ -283,6 +337,7 @@ async function seedData() {
                 {
                     title: 'MIT iQuHACK 2026 (Remote)',
                     role: 'Selected Participant',
+                    category: 'Hackathon',
                     description: 'Worked on quantum computing challenges focusing on quantum algorithms and hybrid quantum–AI approaches',
                     source: null,
                     demo_video: null,
@@ -293,6 +348,7 @@ async function seedData() {
                 {
                     title: 'Smart India Hackathon 2024',
                     role: 'Finalist',
+                    category: 'Hackathon',
                     description: 'Selected among top teams nationwide for developing an AI-based solution for smart city management',
                     source: 'https://github.com/asharish1805',
                     demo_video: null,
@@ -303,6 +359,7 @@ async function seedData() {
                 {
                     title: 'MSME IDEA Hackathon 2024',
                     role: 'Participant',
+                    category: 'Hackathon',
                     description: 'Participated in MSME IDEA Hackathon developing innovative solutions for MSME sector challenges',
                     source: null,
                     demo_video: null,
@@ -313,6 +370,7 @@ async function seedData() {
                 {
                     title: 'AI & Data Science Projects',
                     role: '6 Major Projects',
+                    category: 'Project',
                     description: 'Successfully completed 6 comprehensive AI/ML projects covering forecasting, web scraping, BI dashboards, and cryptography',
                     source: null,
                     demo_video: null,
@@ -323,6 +381,7 @@ async function seedData() {
                 {
                     title: 'Academic Performance',
                     role: '7.47 CGPA',
+                    category: 'Education',
                     description: 'Maintained good academic standing throughout B.E. in Artificial Intelligence & Data Science program',
                     source: null,
                     demo_video: null,
@@ -333,6 +392,7 @@ async function seedData() {
                 {
                     title: 'Technical Club Leadership',
                     role: 'AI Club Member',
+                    category: 'Leadership',
                     description: 'Active member organizing workshops and sessions on AI/ML technologies for fellow students',
                     source: null,
                     demo_video: null,
@@ -344,11 +404,114 @@ async function seedData() {
 
             for (const a of achievements) {
                 await db.query(`
-                    INSERT INTO achievements (title, role, description, source_code_link, demo_video_link, live_demo_link, display_order, icon_class)
-                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
-                `, [a.title, a.role, a.description, a.source, a.demo_video, a.live_demo, a.order, a.icon]);
+                    INSERT INTO achievements (title, role, category, description, source_code_link, demo_video_link, live_demo_link, display_order, icon_class)
+                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+                `, [a.title, a.role, a.category || 'Achievement', a.description, a.source, a.demo_video, a.live_demo, a.order, a.icon]);
             }
             console.log('✅ Achievements seeded');
+        }
+
+        // 6. Micro-SaaS
+        const saasCount = await db.query('SELECT COUNT(*) FROM micro_saas');
+        if (parseInt(saasCount.rows[0].count) === 0) {
+            const micronSaas = [
+                {
+                    title: "StreamFlow",
+                    subtitle: "Netflix AI Copilot",
+                    role: "Lead Developer & Product Designer",
+                    status: "Prototype (MVP)",
+                    description: "Built a 'Micro-SaaS' desktop application to automate streaming workflows, reducing user interaction time by 90%.\nEngineered a Computer Vision layer (OpenCV) to autonomously detect and click dynamic UI elements like 'Skip Intro'.\nDeveloped a custom recommendation engine mapping user moods to content queries using complex logic.\nDesigned a native-style GUI (Tkinter) with secure coordinate-based authentication handling.",
+                    technologies: "Python, Selenium, Tkinter, OpenCV, Threading",
+                    icon: "fas fa-play",
+                    color: "linear-gradient(135deg, #E50914, #B81D24)",
+                    order: 1
+                },
+                {
+                    title: "RecruitAI",
+                    subtitle: "Smart Hiring Assistant",
+                    role: "Full Stack Developer",
+                    status: "Beta Testing",
+                    description: "Developed an AI-powered recruitment platform automating resume screening and scheduling.\nImplemented NLP algorithms to parse resumes and match candidates to job descriptions with 85% accuracy.\nReduced hiring administrative time by 40% through automated interview scheduling workflows.\nBuilt a responsive React frontend with real-time candidate analytics.",
+                    technologies: "Python, FastAPI, React, NLP, PostgreSQL",
+                    icon: "fas fa-robot",
+                    color: "linear-gradient(135deg, #0077B5, #00A0DC)",
+                    order: 2
+                },
+                {
+                    title: "DocuMind",
+                    subtitle: "Intelligent Document Analysis",
+                    role: "AI Engineer",
+                    status: "Concept",
+                    description: "Designed a document processing SaaS using OCR and LLMs to extract insights from legal documents.\nImplemented Tesseract OCR for high-accuracy text extraction from scanned PDFs and images.\nIntegrated Transformer models to summarize complex legal jargon into actionable executive summaries.\nEnables instant querying of document repositories using natural language.",
+                    technologies: "Python, Tesseract, Transformers, Flask, React",
+                    icon: "fas fa-file-invoice",
+                    color: "linear-gradient(135deg, #10B981, #34D399)",
+                    order: 3
+                },
+                {
+                    title: "FinTrack",
+                    subtitle: "Personal Finance Analytics",
+                    role: "Solutions Architect",
+                    status: "Development",
+                    description: "Architected a personal finance management tool aggregating data from multiple bank accounts.\nDeveloped ML models to categorize transaction expenses automatically with 90% precision.\nCreated predictive budget insights helping users forecast savings based on spending habits.\nVisualized financial health through interactive charts using Chart.js.",
+                    technologies: "Node.js, Express, MongoDB, Chart.js, ML.NET",
+                    icon: "fas fa-chart-pie",
+                    color: "linear-gradient(135deg, #F59E0B, #FBBF24)",
+                    order: 4
+                },
+                {
+                    title: "EdSync",
+                    subtitle: "Smart Learning Platform",
+                    role: "Lead Developer",
+                    status: "Ideation",
+                    description: "Conceptualized an adaptive learning platform customizing study plans based on student performance.\nFeatures real-time progress tracking to identify knowledge gaps and recommend resources.\nUses collaborative filtering to suggest peer study groups and relevant learning materials.\nDesigned a gamified interface to increase student engagement and retention.",
+                    technologies: "Vue.js, Firebase, Python, Sklearn",
+                    icon: "fas fa-graduation-cap",
+                    color: "linear-gradient(135deg, #8B5CF6, #A78BFA)",
+                    order: 5
+                },
+                {
+                    title: "QuantumLeap",
+                    subtitle: "Quantum Sim Interface",
+                    role: "Researcher",
+                    status: "Prototype",
+                    description: "Developed a visual interface for simulating quantum circuits and visualizing qubit states.\nImplemented the Bloch sphere visualization using Three.js for intuitive quantum state representation.\nIntegrated Qiskit backend to execute quantum algorithms and display real-time results.\nMakes complex quantum computing concepts accessible to students through interactive simulations.",
+                    technologies: "Python, Qiskit, React, Three.js",
+                    icon: "fas fa-atom",
+                    color: "linear-gradient(135deg, #3B82F6, #93C5FD)",
+                    order: 6
+                },
+                {
+                    title: "CyberSentinel",
+                    subtitle: "Threat Detection AI",
+                    role: "Security Engineer",
+                    status: "Concept",
+                    description: "Proposed a real-time network traffic anomaly detection system using deep learning autoencoders.\nDesigned to identify potential security breaches and zero-day attacks by analyzing traffic patterns.\nUses PyTorch for training models on normal traffic data to detect deviations.\nIntegrated Grafana for real-time monitoring and alerting of suspicious activities.",
+                    technologies: "Python, PyTorch, Scapy, Grafana",
+                    icon: "fas fa-shield-virus",
+                    color: "linear-gradient(135deg, #EF4444, #FCA5A5)",
+                    order: 7
+                },
+                {
+                    title: "HealthPulse",
+                    subtitle: "Remote Patient Monitoring",
+                    role: "Backend Dev",
+                    status: "Development",
+                    description: "Building an IoT-enabled platform for continuous monitoring of patient vitals remotely.\nConnects wearable devices via MQTT to a centralized MongoDB database for real-time tracking.\nImplements AI-driven alerts to notify medical staff of irregular vital signs immediately.\nDeveloping a secure Flutter mobile app for patients to view their health metrics.",
+                    technologies: "Node.js, MQTT, MongoDB, Flutter",
+                    icon: "fas fa-heartbeat",
+                    color: "linear-gradient(135deg, #EC4899, #FBCFE8)",
+                    order: 8
+                }
+            ];
+
+            for (const s of micronSaas) {
+                await db.query(`
+                    INSERT INTO micro_saas (title, subtitle, role, status, description, technologies, icon_class, color_gradient, display_order)
+                    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+                `, [s.title, s.subtitle, s.role, s.status, s.description, s.technologies, s.icon, s.color, s.order]);
+            }
+            console.log('✅ Micro-SaaS seeded');
         }
 
         console.log('🎉 Seeding complete!');

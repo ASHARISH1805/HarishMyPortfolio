@@ -88,7 +88,8 @@
                     <span>Available for Full-time Opportunities</span>
                 </div>
                 <h1 class="hero-title">
-                    Hi, I'm <span class="gradient-text">Harish A.S</span>
+                    Hi, I'm <span class="gradient-text">Harish A.S</span> <span class="vibe-badge"><i
+                            class="fas fa-bolt"></i> Vibe Coder</span>
                 </h1>
                 <h2 class="hero-subtitle">
                     B.E. – Artificial Intelligence & Data Science
@@ -97,6 +98,15 @@
                     Aspiring AI & Data Science Engineer with strong hands-on project experience in Machine Learning,
                     Deep Learning, and Data Analytics
                 </p>
+                <div class="hero-contact-info">
+                    <a href="mailto:anandhunharish@gmail.com" class="hero-contact-link">
+                        <i class="fas fa-envelope"></i> anandhunharish@gmail.com
+                    </a>
+                    <a href="tel:+918328233110" class="hero-contact-link">
+                        <i class="fas fa-phone-alt"></i> +91 83282 33110
+                    </a>
+                </div>
+
                 <div class="hero-buttons">
                     <a href="resume.html" target="_blank" class="btn btn-primary">
                         <i class="fas fa-file-alt"></i>
@@ -113,19 +123,69 @@
                 </div>
 
                 <!-- Hero Stats (Moved from About) -->
+                <!-- Hero Stats (Upgraded) -->
                 <div class="hero-stats" data-aos="fade-up" data-aos-delay="200">
-                    <div class="stat-item">
-                        <div class="stat-number" id="project-count">6</div>
-                        <div class="stat-label">Projects</div>
+                    <div class="hero-stat-card">
+                        <div class="stat-icon-wrapper">
+                            <i class="fas fa-layer-group"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="project-count">6+</div>
+                            <div class="stat-label">Major Projects</div>
+                        </div>
                     </div>
-                    <div class="stat-item">
-                        <div class="stat-number" id="internship-count">2</div>
-                        <div class="stat-label">Internships</div>
+                    <div class="hero-stat-card">
+                        <div class="stat-icon-wrapper">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="internship-count">2</div>
+                            <div class="stat-label">Internships</div>
+                        </div>
                     </div>
-                    <div class="stat-item">
-                        <div class="stat-number">7.4</div>
-                        <div class="stat-label">CGPA</div>
+                    <div class="hero-stat-card">
+                        <div class="stat-icon-wrapper">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number">7.4</div>
+                            <div class="stat-label">CGPA</div>
+                        </div>
                     </div>
+
+                    <div class="hero-stat-card">
+                        <div class="stat-icon-wrapper">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="hackathon-count">3</div>
+                            <div class="stat-label">Hackathons</div>
+                        </div>
+                    </div>
+                    <div class="hero-stat-card">
+                        <div class="stat-icon-wrapper">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="cert-count">6</div>
+                            <div class="stat-label">Certifications</div>
+                        </div>
+                    </div>
+                    <div class="hero-stat-card">
+                        <div class="stat-icon-wrapper">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <div class="stat-content">
+                            <div class="stat-number" id="saas-count">3</div>
+                            <div class="stat-label">Micro-SaaS</div>
+                        </div>
+                    </div>
+
+
+
+
+
+
                 </div>
             </div>
 
@@ -136,7 +196,7 @@
                         <div class="saas-header">
                             <div class="saas-title-group">
                                 <div class="saas-badge">Featured</div>
-                                <h3>Micro-SaaS Products</h3>
+                                <h3>My Micro-SaaS Products</h3>
                             </div>
                             <p>Next-Gen Tools Built for Scale</p>
                         </div>
@@ -186,8 +246,9 @@
                                 </div>
                             </div>
 
-                            <!-- Item 4: FinTrack -->
-                            <div class="saas-item" onclick="openSaasModal(3)">
+
+                            <!-- Item 4: FinTrack (Hidden for space) -->
+                            <!-- <div class="saas-item" onclick="openSaasModal(3)">
                                 <div class="saas-icon"
                                     style="background: linear-gradient(135deg, #F59E0B, #FBBF24); box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);">
                                     <i class="fas fa-chart-pie"></i>
@@ -199,10 +260,10 @@
                                 <div class="saas-arrow">
                                     <i class="fas fa-chevron-right"></i>
                                 </div>
-                            </div>
+                            </div> -->
 
-                            <!-- Item 5: EdSync -->
-                            <div class="saas-item" onclick="openSaasModal(4)">
+                            <!-- Item 5: EdSync (Hidden for space) -->
+                            <!-- <div class="saas-item" onclick="openSaasModal(4)">
                                 <div class="saas-icon"
                                     style="background: linear-gradient(135deg, #8B5CF6, #A78BFA); box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);">
                                     <i class="fas fa-graduation-cap"></i>
@@ -214,7 +275,8 @@
                                 <div class="saas-arrow">
                                     <i class="fas fa-chevron-right"></i>
                                 </div>
-                            </div>
+                            </div> -->
+
                         </div>
                     </div>
                 </div>
@@ -931,29 +993,39 @@
                 <button class="close-modal" onclick="closeSaasModal()">&times;</button>
             </div>
             <div class="saas-modal-body">
+                <div id="saasModalVideoContainer"
+                    style="display:none; margin-bottom: 20px; border-radius: 8px; overflow: hidden; background: #000;">
+                    <video id="saasModalVideo" controls style="width: 100%; display: block;"></video>
+                </div>
+
+                <div class="saas-section-header">
+                    <i class="fas fa-star"></i>
+                    <h4>Key Highlights</h4>
+                </div>
                 <div class="saas-description" id="saasModalDesc">
                     Description goes here...
                 </div>
 
                 <div class="saas-detail-grid">
                     <div class="saas-detail-item">
-                        <h4>Role</h4>
+                        <h4><i class="fas fa-user-tag"></i> Role</h4>
                         <p id="saasModalRole">Lead Developer</p>
                     </div>
                     <div class="saas-detail-item">
-                        <h4>Status</h4>
+                        <h4><i class="fas fa-battery-half"></i> Status</h4>
                         <p id="saasModalStatus">Prototype</p>
                     </div>
                 </div>
 
                 <div class="saas-detail-item">
-                    <h4>Tech Stack</h4>
+                    <h4><i class="fas fa-code"></i> Tech Stack</h4>
                     <div class="saas-tech-stack" id="saasModalTech">
                         <!-- Dynamic Tags -->
                     </div>
                 </div>
             </div>
-            <div class="saas-modal-footer">
+            <div class="saas-modal-footer" id="saasModalFooter">
+                <!-- Dynamic Buttons will be injected here -->
                 <button class="btn btn-secondary" onclick="closeSaasModal()">Close</button>
             </div>
         </div>

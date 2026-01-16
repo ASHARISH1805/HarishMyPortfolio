@@ -55,6 +55,9 @@ async function deploy() {
             await db.query(`ALTER TABLE ${table} ALTER COLUMN certificate_link TYPE TEXT`);
         }
 
+        // Add Category to Achievements (for Hackathon counting)
+        await db.query(`ALTER TABLE achievements ADD COLUMN IF NOT EXISTS category VARCHAR(50) DEFAULT 'Achievement'`);
+
         // ==========================================
         // FORCE UPDATE SKILLS (User Requirement)
         // ==========================================
@@ -122,6 +125,25 @@ async function deploy() {
                 is_read BOOLEAN DEFAULT FALSE
             )
         `);
+        // 6. Create Micro-SaaS Table
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS micro_saas (
+                id SERIAL PRIMARY KEY,
+                title VARCHAR(255) NOT NULL,
+                subtitle VARCHAR(255),
+                role VARCHAR(255),
+                status VARCHAR(100),
+                description TEXT,
+                technologies TEXT,
+                icon_class VARCHAR(100),
+                color_gradient VARCHAR(255),
+                display_order INTEGER DEFAULT 0,
+                is_visible BOOLEAN DEFAULT TRUE,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+        console.log('✅ Micro-SaaS table ready.');
+
         console.log('✅ Messages table ready.');
 
         console.log('✅ Deployment DB Check Complete.');

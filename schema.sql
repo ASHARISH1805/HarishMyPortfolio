@@ -77,3 +77,21 @@ CREATE TABLE IF NOT EXISTS users (
     password_hash VARCHAR(500) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Micro-SaaS Section
+CREATE TABLE IF NOT EXISTS micro_saas (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    subtitle VARCHAR(255),
+    role VARCHAR(255),
+    status VARCHAR(100),
+    description TEXT,
+    technologies TEXT,
+    icon_class VARCHAR(100),
+    color_gradient VARCHAR(255),
+    display_order INTEGER DEFAULT 0,
+    is_visible BOOLEAN DEFAULT TRUE,
+    source_code_link VARCHAR(500),
+    demo_video_link VARCHAR(500),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
