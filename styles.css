@@ -2659,3 +2659,119 @@ section {
         padding: 0.75rem;
     }
 }
+/* Custom SaaS Icons */
+.saas-keyboard-icon {
+    font-size: 1.3rem;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+
+/* SaaS Mini Buttons */
+.saas-quick-links {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.saas-mini-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    border: 1px solid var(--border-color);
+}
+
+.saas-mini-btn:hover {
+    transform: translateY(-2px);
+    color: white;
+    border-color: transparent;
+}
+
+.saas-mini-btn.github:hover {
+    background: #333;
+}
+
+.saas-mini-btn.demo:hover {
+    background: var(--primary-color);
+}
+
+/* Ensure arrow stays centered given new height */
+.saas-item {
+    align-items: center; 
+}
+
+
+/* Aligned to the right */
+.saas-quick-links.right-aligned {
+    margin-left: auto;
+    display: flex;
+    gap: 10px;
+}
+
+.saas-mini-btn.github-color {
+    background: #24292e;
+    color: white;
+    border: none;
+    width: 38px;
+    height: 38px;
+    font-size: 1.1rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.saas-mini-btn.demo-color {
+    background: #0070f3;
+    color: white;
+    border: none;
+    width: 38px;
+    height: 38px;
+    font-size: 1rem;
+    box-shadow: 0 4px 12px rgba(0, 112, 243, 0.3);
+}
+
+.saas-mini-btn.github-color:hover {
+    background: #1B1F23;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+}
+
+.saas-mini-btn.demo-color:hover {
+    background: #0060DF;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 112, 243, 0.4);
+}
+
+
+/* Professional Small Icons Override */
+.saas-mini-btn.github-color,
+.saas-mini-btn.demo-color {
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #a0a0a0;
+    box-shadow: none;
+    font-size: 0.9rem;
+}
+
+.saas-mini-btn.github-color:hover {
+    background: #24292e;
+    color: white;
+    border-color: #24292e;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.saas-mini-btn.demo-color:hover {
+    background: #0070f3;
+    color: white;
+    border-color: #0070f3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 112, 243, 0.3);
+}
+

@@ -441,7 +441,7 @@ function openModal(section, item = null) {
                 <input type="text" name="color_gradient" value="${item ? item.color_gradient : ''}" placeholder="linear-gradient(...)">
             </div>
             ${linkField('GitHub/Source Link', 'source_code_link', item?.source_code_link)}
-            ${fileField('Demo Video (Upload or Link)', 'demo_video_link', item?.demo_video_link)}
+            ${linkField('Demo / Live Link', 'demo_video_link', item?.demo_video_link)}
         `;
     }
 
