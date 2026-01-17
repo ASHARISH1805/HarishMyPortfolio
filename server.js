@@ -48,11 +48,67 @@ app.post('/api/admin/upload', upload.single('file'), (req, res) => {
     }
 
     // Return the path relative to the server root
-    // Note: since we use diskStorage, req.file.path will be something like 'uploads\\filename...' on Windows.
-    // We want a web-accessible URL.
     const webPath = 'uploads/' + req.file.filename;
 
     res.json({ filePath: webPath });
+});
+
+// RESUME ENDPOINTS (Persistent Storage in DB)
+app.post('/api/admin/resume', upload.single('file'), async (req, res) => {
+    if (!req.file) {
+        console.error('No file received for resume upload');
+        return res.status(400).json({ error: 'No file uploaded' });
+    }
+
+    try {
+        // Read file from disk (since multer saved it there)
+        // Check if file exists first
+        if (!fs.existsSync(req.file.path)) {
+            console.error('File not found on disk:', req.file.path);
+            return res.status(500).json({ error: 'File save failed' });
+        }
+
+        const fileBuffer = fs.readFileSync(req.file.path);
+        const b64 = fileBuffer.toString('base64');
+        const mimeType = req.file.mimetype;
+
+        // Save to DB
+        await db.query(`
+            INSERT INTO site_settings (key, value, mime_type)
+            VALUES ('resume_pdf', $1, $2)
+            ON CONFLICT (key) DO UPDATE 
+            SET value = EXCLUDED.value, mime_type = EXCLUDED.mime_type
+        `, [b64, mimeType]);
+
+        // Cleanup: Delete the temp file from disk
+        try { fs.unlinkSync(req.file.path); } catch (e) { console.error('Cleanup error:', e); }
+
+        console.log('Resume saved to database successfully');
+        res.json({ success: true, message: 'Resume updated successfully' });
+    } catch (error) {
+        console.error('Resume upload error:', error);
+        res.status(500).json({ error: 'Failed to update resume' });
+    }
+});
+
+app.get('/api/resume', async (req, res) => {
+    try {
+        const result = await db.query("SELECT value, mime_type FROM site_settings WHERE key = 'resume_pdf'");
+
+        if (result.rows.length === 0) {
+            return res.status(404).send('Resume not found. Please upload one in the Admin Panel.');
+        }
+
+        const { value, mime_type } = result.rows[0];
+        const fileBuffer = Buffer.from(value, 'base64');
+
+        res.setHeader('Content-Type', mime_type || 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment; filename="Harish_Resume.pdf"');
+        res.send(fileBuffer);
+    } catch (error) {
+        console.error('Resume fetch error:', error);
+        res.status(500).send('Error retrieving resume');
+    }
 });
 
 // ================= API ROUTES =================

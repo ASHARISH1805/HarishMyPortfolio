@@ -144,6 +144,16 @@ async function deploy() {
         `);
         console.log('✅ Micro-SaaS table ready.');
 
+        // 7. Site Settings (For persistent Resume, etc.)
+        await db.query(`
+            CREATE TABLE IF NOT EXISTS site_settings (
+                key VARCHAR(50) PRIMARY KEY,
+                value TEXT,
+                mime_type VARCHAR(50)
+            )
+        `);
+        console.log('✅ Site Settings table ready.');
+
         console.log('✅ Messages table ready.');
 
         console.log('✅ Deployment DB Check Complete.');

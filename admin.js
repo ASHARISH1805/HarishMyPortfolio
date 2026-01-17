@@ -551,4 +551,51 @@ async function deleteItem(section, id) {
 }
 
 // Initial Load
+// Initial Load
 fetchData('skills');
+
+// --- Resume Upload Handler ---
+const resumeUploadForm = document.getElementById('resumeUploadForm');
+if (resumeUploadForm) {
+    resumeUploadForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const fileInput = document.getElementById('resumeFile');
+        const file = fileInput.files[0];
+        const statusDiv = document.getElementById('resumeUploadStatus');
+        const btn = document.getElementById('uploadResumeBtn');
+
+        if (!file) {
+            alert('Please select a PDF file first.');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        statusDiv.innerHTML = '<span style="color: blue;"><i class="fas fa-spinner fa-spin"></i> Uploading...</span>';
+        btn.disabled = true;
+
+        try {
+            const res = await fetch('/api/admin/resume', {
+                method: 'POST',
+                headers: getAuthHeaders(),
+                body: formData
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                statusDiv.innerHTML = '<span style="color: green;"><i class="fas fa-check-circle"></i> Resume updated successfully!</span>';
+                fileInput.value = ''; // Reset
+            } else {
+                throw new Error(data.error || 'Upload failed');
+            }
+        } catch (err) {
+            console.error(err);
+            statusDiv.innerHTML = `<span style="color: red;"><i class="fas fa-exclamation-circle"></i> Error: ${err.message}</span>`;
+        } finally {
+            btn.disabled = false;
+        }
+    });
+}
