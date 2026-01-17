@@ -64,11 +64,16 @@ const skills = [
 ];
 
 async function seedSkills() {
-    console.log('🔄 Re-seeding Skills...');
-    // Clear existing skills to ensure list matches exactly
-    await db.query('DELETE FROM skills');
+    console.log('Checking Skills...');
+    // Only seed if table is empty
+    const res = await db.query('SELECT COUNT(*) FROM skills');
+    if (parseInt(res.rows[0].count) > 0) {
+        console.log('✅ Skills already exist. Skipping seed.');
+        return;
+    }
 
-    // Reset ID sequence if possible (optional, for cleanliness)
+    console.log('🔄 Seeding Skills...');
+    // Reset ID sequence if possible
     try { await db.query('ALTER SEQUENCE skills_id_seq RESTART WITH 1'); } catch (e) { }
 
     for (const skill of skills) {
@@ -77,7 +82,7 @@ async function seedSkills() {
             VALUES ($1, $2, $3, $4)
         `, [skill.title, skill.technologies, skill.order, skill.icon]);
     }
-    console.log('✅ Skills updated.');
+    console.log('✅ Skills seeded.');
 }
 
 async function seedData() {
