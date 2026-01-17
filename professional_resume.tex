@@ -1,52 +1,19 @@
-%-----------------------------------------------------------------------------------------------------------------------------------------------%
-%	The MIT License (MIT)
-%
-%	Copyright (c) 2024 Harish A.S
-%
-%	Permission is hereby granted, free of charge, to any person obtaining a copy
-%	of this software and associated documentation files (the "Software"), to deal
-%	in the Software without restriction, including without limitation the rights
-%	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-%	copies of the Software, and to permit persons to whom the Software is
-%	furnished to do so, subject to the following conditions:
-%	
-%	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-%	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-%	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-%	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-%	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-%	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-%	THE SOFTWARE.
-%	
-%
-%-----------------------------------------------------------------------------------------------------------------------------------------------%
+\documentclass[11pt,a4paper]{article}
 
-%----------------------------------------------------------------------------------------
-%	DOCUMENT DEFINITION
-%----------------------------------------------------------------------------------------
-
-\documentclass[a4paper,11pt]{article}
-
-%----------------------------------------------------------------------------------------
-%	PACKAGES
-%----------------------------------------------------------------------------------------
-\usepackage{latexsym}
-\usepackage[empty]{fullpage}
-\usepackage{titlesec}
-\usepackage{marvosym}
-\usepackage[usenames,dvipsnames]{color}
-\usepackage{verbatim}
+\usepackage[left=1.5cm, right=1.5cm, top=1.5cm, bottom=1.5cm]{geometry}
 \usepackage{enumitem}
-\usepackage[hidelinks]{hyperref}
-\usepackage{fancyhdr}
-\usepackage[english]{babel}
-\usepackage{tabularx}
-\usepackage{fontawesome5}
-\usepackage{multicol}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{xcolor}
 \usepackage{tikz}
-\usetikzlibrary{shapes.geometric, calc}
+\usepackage{fontawesome5}
+\usepackage{tcolorbox}
+\usepackage{tabularx}
 
-% Define Custom Colors
+\setlength{\parindent}{0pt}
+\pagenumbering{gobble}
+
+\definecolor{link}{RGB}{0,0,150}
 \definecolor{saasRed}{HTML}{DC2626}
 \definecolor{saasBlue}{HTML}{2563EB}
 \definecolor{saasGreen}{HTML}{059669}
@@ -54,235 +21,237 @@
 \definecolor{saasTeal}{HTML}{0891B2}
 \definecolor{saasPurple}{HTML}{7C3AED}
 
+\hypersetup{
+    colorlinks=true,
+    urlcolor=link
+}
+
+\titlespacing{\section}{0pt}{10pt}{6pt}
+\titleformat{\section}
+{\large\bfseries}
+{}
+{0em}
+{}
+[\titlerule]
+
+\renewcommand{\baselinestretch}{1.08}
+
 % Custom Commands for Design
 \newcommand{\saasIcon}[2]{%
     \tikz[baseline=-0.3em]{
-        \node[fill=#2, rounded corners=4pt, inner sep=4pt, minimum width=2.2em, minimum height=2.2em, anchor=base] {\textcolor{white}{\large #1}};
+        \node[fill=#2, rounded corners=4pt, inner sep=4pt, minimum width=2.2em, minimum height=1.2em, anchor=base] {\textcolor{white}{\large #1}};
     }%
 }
+
+\newcommand{\netflixIcon}{%
+\tikz[baseline=-0.3em]{
+  \node[
+    fill=red!85!black,
+    text=white,
+    rounded corners=3pt,
+    inner sep=3pt,
+    font=\bfseries\small
+  ] {N};
+}}
 
 \newcommand{\saasBadge}[2]{%
     \tikz[baseline=-0.1em]{
         \node[draw=#2, text=#2, fill=#2!5, rounded corners=3pt, inner sep=2.5pt, font=\scriptsize\bfseries] {\strut #1};
     }%
 }
-\setlength{\multicolsep}{-3.0pt}
-\setlength{\columnsep}{-1pt}
-\input{glyphtounicode}
-
-
-%----------------------------------------------------------------------------------------
-%	FONT OPTIONS
-%----------------------------------------------------------------------------------------
-% sans-serif
-% \usepackage[sfdefault]{FiraSans}
-% \usepackage[sfdefault]{roboto}
-% \usepackage[sfdefault]{noto-sans}
-% \usepackage[default]{sourcesanspro}
-
-% serif
-% \usepackage{CormorantGaramond}
-% \usepackage{charter}
-
-
-\pagestyle{fancy}
-\fancyhf{} % clear all header and footer fields
-\fancyfoot{}
-\renewcommand{\headrulewidth}{0pt}
-\renewcommand{\footrulewidth}{0pt}
-
-% Adjust margins
-\addtolength{\oddsidemargin}{-0.6in}
-\addtolength{\evensidemargin}{-0.5in}
-\addtolength{\textwidth}{1.19in}
-\addtolength{\topmargin}{-.7in}
-\addtolength{\textheight}{1.4in}
-
-\urlstyle{same}
-
-\raggedbottom
-\raggedright
-\setlength{\tabcolsep}{0in}
-
-% Sections formatting
-\titleformat{\section}{
-  \vspace{-4pt}\scshape\raggedright\large\bfseries
-}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
-
-% Ensure that generate pdf is machine readable/ATS parsable
-\pdfgentounicode=1
-
-%----------------------------------------------------------------------------------------
-%	CUSTOM COMMANDS
-%----------------------------------------------------------------------------------------
-\newcommand{\resumeItem}[1]{
-  \item\small{
-    {#1 \vspace{-2pt}}
-  }
-}
-
-\newcommand{\classesList}[4]{
-    \item\small{
-        {#1 #2 #3 #4 \vspace{-2pt}}
-  }
-}
-
-\newcommand{\resumeSubheading}[4]{
-  \vspace{-2pt}\item
-    \begin{tabular*}{1.0\textwidth}[t]{l@{\extracolsep{\fill}}r}
-      \textbf{#1} & \textbf{\small #2} \\
-      \textit{\small#3} & \textit{\small #4} \\
-    \end{tabular*}\vspace{-7pt}
-}
-
-\newcommand{\resumeSubSubheading}[2]{
-    \item
-    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
-      \textit{\small#1} & \textit{\small #2} \\
-    \end{tabular*}\vspace{-7pt}
-}
-
-\newcommand{\resumeProjectHeading}[2]{
-    \item
-    \begin{tabular*}{1.001\textwidth}{l@{\extracolsep{\fill}}r}
-      \small#1 & \textbf{\small #2}\\
-    \end{tabular*}\vspace{-7pt}
-}
-
-\newcommand{\resumeSubItem}[1]{\resumeItem{#1}\vspace{-4pt}}
-
-\renewcommand\labelitemi{$\vcenter{\hbox{\tiny$\bullet$}}$}
-\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
-
-\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.0in, label={}]}
-\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
-\newcommand{\resumeItemListStart}{\begin{itemize}}
-\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
-
-%----------------------------------------------------------------------------------------
-%	CV / RESUME STARTS HERE
-%----------------------------------------------------------------------------------------
 
 \begin{document}
 
-%----------HEADING----------
-\begin{center}
-    {\Huge \scshape Harish A.S} \\ \vspace{5pt}
-    \textbf{AI \& Data Science Engineer | Vibe Coder} \\ \vspace{5pt}
-    \small \raisebox{-0.1em}{\faPhone} +91 83282 33110 ~ \href{mailto:anandhunharish@gmail.com}{\raisebox{-0.2em}{\faEnvelope}\  anandhunharish@gmail.com} ~ 
-    \href{https://linkedin.com/in/asharish}{\raisebox{-0.2em}{\faLinkedin}\ linkedin.com/in/asharish}  ~
-    \href{https://github.com/asharish1805}{\raisebox{-0.2em}{\faGithub}\ github.com/asharish1805}
-    \vspace{-8pt}
-\end{center}
+%==================== HEADER ====================
+{\Huge \textbf{HARISH A. S}}\\
 
+B.Tech. Artificial Intelligence \& Data Science (Final Year)
 
-%-----------EDUCATION-----------
-\section{Education}
-  \resumeSubHeadingListStart
-    \resumeSubheading
-      {St. Joseph's Institute of Technology}{Chennai, India}
-      {Bachelor of Engineering in Artificial Intelligence and Data Science}{2021 -- 2025}
-      \resumeItemListStart
-        \resumeItem{CGPA: 7.47/10}
-        \resumeItem{Relevant Coursework: Machine Learning, Deep Learning, Data Structures, Algorithms, DBMS, Python Programming.}
-      \resumeItemListEnd
-  \resumeSubHeadingListEnd
+\textbf{Target Roles: AI Engineer | Data Analyst | Software Engineer | Research Intern}\\\\
+\faEnvelope\ \href{mailto:anandhunharish@gmail.com}{anandhunharish@gmail.com} \quad
+\faPhone\ +91~83282~33110 \quad
+\faLinkedin\ \href{https://linkedin.com/in/asharish}{linkedin.com/in/asharish}\\[2pt]
+\faGithub\ \href{https://github.com/asharish1805}{github.com/asharish1805} \quad
+\faGlobe\ \href{https://harishas-portfolio.onrender.com}{https://harishas-portfolio.onrender.com/} \quad
+\faMapMarker*\ Madurai, Tamil Nadu
 
-%-----------EXPERIENCE-----------
-\section{Experience}
-  \resumeSubHeadingListStart
+%==================== SUMMARY ====================
+\section*{Professional Summary}
+AI \& Data Science undergraduate with hands-on experience in machine learning, data analytics, full-stack development, and applied AI systems. Proven ability to build end-to-end solutions including forecasting models, dashboards, AI-powered platforms, and cloud-deployed applications. Strong interest in research-oriented problem solving and scalable software systems.
 
-    \resumeSubheading
-      {Company Name (Example: Tech Solutions)}{Location}
-      {Role (e.g., Data Science Intern)}{Month Year -- Month Year}
-      \resumeItemListStart
-        \resumeItem{Developed and optimized machine learning models for [Specific Task], improving accuracy by [X]\%.}
-        \resumeItem{Collaborated with cross-functional teams to integrate AI solutions into existing products.}
-        \resumeItem{Automated data preprocessing pipelines using Python (Pandas, NumPy), reducing manual effort by [Y]\%.}
-      \resumeItemListEnd
-      
-    \resumeSubheading
-      {Another Company}{Location}
-      {Role (e.g., Web Developer Intern)}{Month Year -- Month Year}
-      \resumeItemListStart
-        \resumeItem{Built responsive web interfaces using HTML, CSS, JavaScript, and React.}
-        \resumeItem{Implemented RESTful APIs and ensured seamless communication between frontend and backend.}
-      \resumeItemListEnd
+%==================== MICRO-SAAS PRODUCTS ====================
+\section*{Micro-SaaS Products}
+\vspace{-0.4em}
 
-  \resumeSubHeadingListEnd
+% ---------- StreamFlow ----------
+\noindent
+\colorbox{red!90}{\textcolor{white}{\textbf{\small N}}}\hspace{0.6em}
+\textbf{StreamFlow – \textit{Netflix AI Copilot} \textcolor{saasGreen}{(Proof of Concept)}}
+\hfill
+\faGithub\ \href{https://github.com/ASHARISH1805/NetflixStreamFlow.git}{GitHub}
 
+\vspace{-0.4em}
+\begin{itemize}[leftmargin=1.2em, itemsep=0.25em, topsep=0.3em]
+    \item Built 'Netflix StreamFlow', a comprehensive desktop automation application that enhances user experience with AI-driven mood recommendations and auto-skip intro capabilities. Designed a custom Tkinter interface that integrates seamlessly with a Selenium backend to autonomously navigate dynamic Single Page Applications and manage user sessions\\
+    \textbf{Tech Stack:} Python 3, Selenium WebDriver (Automation), Tkinter (GUI), SpeechRecognition   
+\end{itemize}
 
-%-----------MICRO-SAAS & PROJECTS-----------
-%-----------MICRO-SAAS PRODUCTS-----------
-\section{My Micro-SaaS Products}
-    \vspace{-4pt}
-    {\small \tikz[baseline=-0.2em]{\node[fill=saasTeal, rounded corners=3pt, inner sep=3pt, text=white, font=\bfseries\tiny] {FEATURED};} \hspace{0.3em} \textit{Next-Gen Tools Built for Scale}}
-    \vspace{2pt}
+\vspace{0.4em}
 
-    \begin{itemize}[leftmargin=0in, label={}]
-      
-      % StreamFlow
-      \item
-        \begin{tabular}{@{}c@{\hspace{0.6em}}p{0.93\textwidth}@{}}
-           \saasIcon{\faPlay}{saasRed} & 
-           {\textbf{\large StreamFlow} \hspace{0.2em} \saasBadge{PROTOTYPE (MVP)}{saasBlue} \hfill \href{https://github.com/asharish1805}{\footnotesize \faGithub\ Source} \hspace{5pt} \href{#}{\footnotesize \faVideo\ Demo}} \\[-4pt]
-           & {\small \textit{Netflix AI Copilot}} \\[-1pt]
-           & {\small Built a desktop 'Micro-SaaS' application to automate streaming workflows, reducing user interaction time by 90\%. Engineered a Computer Vision layer (OpenCV) to autonomously detect and click dynamic UI elements. Developed a custom recommendation engine mapping user moods to content queries using complex logic.}
-        \end{tabular}
-        \vspace{2pt}
+% ---------- TypeFlow ----------
+\noindent
+\colorbox{blue!70}{\textcolor{white}{\faKeyboard}}\hspace{0.6em}
+\textbf{TypeFlow – \textit{Typing Copilot} \textcolor{saasGreen}{(Proof of Concept)}}
+\hfill
+\faGithub\ \href{https://github.com/ASHARISH1805/typingflow.git}{GitHub}
+\quad
+\faExternalLink*\ \href{https://mytypinglclass.netlify.app/}{Demo}
 
-      % RecruitAI
-      \item
-        \begin{tabular}{@{}c@{\hspace{0.6em}}p{0.93\textwidth}@{}}
-           \saasIcon{\faRobot}{saasBlue} & 
-           {\textbf{\large RecruitAI} \hspace{0.2em} \saasBadge{BETA TESTING}{saasGreen} \hfill \href{https://github.com/asharish1805}{\footnotesize \faGithub\ Source} \hspace{5pt} \href{#}{\footnotesize \faVideo\ Demo}} \\[-4pt]
-           & {\small \textit{Smart Hiring Assistant}} \\[-1pt]
-           & {\small Designed an AI-driven recruitment assistant to screen resumes and match candidates to job descriptions. Utilized Natural Language Processing (NLP) to extract key skills and rank applicants automatically.}
-        \end{tabular}
-        \vspace{2pt}
-        
-      % DocuMind
-      \item
-        \begin{tabular}{@{}c@{\hspace{0.6em}}p{0.93\textwidth}@{}}
-           \saasIcon{\faFileAlt}{saasGreen} & 
-           {\textbf{\large DocuMind} \hspace{0.2em} \saasBadge{CONCEPT}{saasPurple} \hfill \href{https://github.com/asharish1805}{\footnotesize \faGithub\ Source} \hspace{5pt} \href{#}{\footnotesize \faVideo\ Demo}} \\[-4pt]
-           & {\small \textit{Intelligent Document Analysis}} \\[-1pt]
-           & {\small Conceptualized an intelligent document processing engine utilizing OCR and Large Language Models. Designed architecture for automated data extraction from unstructured PDF and image files.}
-        \end{tabular}
-        \vspace{2pt}
+\vspace{-0.4em}
+\begin{itemize}[leftmargin=1.2em, itemsep=0.25em, topsep=0.3em]
+    \item Developed a high-performance typing Micro-SaaS that leverages real-time analytics to track and visualize user WPM and accuracy precision. Architected a secure serverless backend with a custom 'Device-Guard' system to strictly enforce desktop-only pedagogical standards.\\
+    \textbf{Tech Stack:} HTML, CSS, JavaScript, Firebase, DOM Manipulation, Responsive Design Strategy
+\end{itemize}
 
-      % FinTrack
-      \item
-        \begin{tabular}{@{}c@{\hspace{0.6em}}p{0.93\textwidth}@{}}
-           \saasIcon{\faChartPie}{saasOrange} & 
-           {\textbf{\large FinTrack} \hspace{0.2em} \saasBadge{DEVELOPMENT}{saasOrange} \hfill \href{https://github.com/asharish1805}{\footnotesize \faGithub\ Source} \hspace{5pt} \href{#}{\footnotesize \faVideo\ Demo}} \\[-4pt]
-           & {\small \textit{Personal Finance Analytics}} \\[-1pt]
-           & {\small Architected a finance tool aggregating data from multiple accounts with automated expense categorization. Developed ML models to categorize transaction expenses automatically with 90\% precision. Created predictive budget insights helping users forecast savings based on spending habits.}
-        \end{tabular}
+%==================== SKILLS ====================
+\section*{Technical Skills}
+\setlength{\parskip}{2pt}
 
-    \end{itemize}
+\textbf{Programming Languages:} Python, C Programming
 
+\textbf{Data Analysis \& Visualization:} Pandas, NumPy, Matplotlib, Seaborn, Qlik Sense
 
-%-----------SKILLS-----------
-\section{Technical Skills}
- \begin{itemize}[leftmargin=0.15in, label={}]
-    \small{\item{
-     \textbf{Languages}{: Python, JavaScript, Java, SQL, HTML/CSS} \\
-     \textbf{Frameworks/Libraries}{: React, Node.js, Express, Flask, Pandas, NumPy, Scikit-learn, TensorFlow/Keras, OpenCV} \\
-     \textbf{Tools/Platforms}{: Git, GitHub, Docker, AWS (Basic), VS Code, Jupyter Notebooks} \\
-     \textbf{Concepts}{: Data Structures \& Algorithms, Machine Learning, Deep Learning, REST APIs, OOP, Database Management}
-    }}
- \end{itemize}
+\textbf{Machine Learning:} Time-Series Forecasting, Regression Models, Model Training \& Evaluation
 
+\textbf{Web Development:} HTML, CSS, JavaScript, Flask
 
-%-----------ACHIEVEMENTS & CERTIFICATIONS-----------
-\section{Achievements \& Certifications}
- \begin{itemize}[leftmargin=0.15in, label={}]
-    \resumeItem{Won \textbf{3 Hackathons} including [Name of Hackathon] for developing innovative solutions.}
-    \resumeItem{Completed \textbf{12+ Certifications} in AI, Data Science, and Full Stack Development from platforms like Coursera and Udemy.}
-    \resumeItem{Recognized as a \textbf{Vibe Coder} for creative problem solving and rapid prototyping.}
- \end{itemize}
+\textbf{Web Scraping \& Automation:} BeautifulSoup, Scrapy, Selenium
 
+\textbf{Databases:} MySQL, SQLite, PostgreSQL, Oracle, SQL Server
 
-%-------------------------------------------
+\textbf{Dashboards \& Analytics:} Interactive BI Dashboards, Supply Chain Analytics, Business Intelligence
+
+\textbf{Cloud \& Deployment:} Render, Base44, Web Application Hosting
+
+\textbf{Version Control, APIs \& Developer Tools:} Git, REST APIs, Visual Studio Code
+
+\textbf{AI-Powered Developer \& Code Generation Tools:} GitHub Copilot, Antigravity, Zencoder, N8N
+
+\textbf{Generative AI \& LLM Platforms:} ChatGPT, Gemini API, Claude
+
+\textbf{Requirements Engineering:} Requirement analysis and documentation, Basic understanding of SDLC and Agile, Wireframing and UX/UI concepts
+
+%==================== EDUCATION ====================
+\section*{Education}
+\textbf{B.Tech. Artificial Intelligence \& Data Science} \hfill 2022 -- 2026 (Expected)\\
+Ramachandra College of Engineering, Eluru, Andhra Pradesh\\
+Affiliated to Jawaharlal Nehru Technological University, Kakinada (JNTUK)\\
+CGPA: 7.4 \\
+\textbf{Intermediate} \hfill 2020 -- 2022\\
+Sri Chaitanya Junior College, Vijayawada, Andhra Pradesh\\
+Board of Intermediate Education (AP Board)\\
+Percentage: 74\%\\
+\textbf{School} \hfill 2020\\
+Kiran International School, Hyderabad, Telangana\\
+Central Board of Secondary Education (CBSE)\\
+Percentage: 59\%
+
+%==================== INTERNSHIPS ====================
+\section*{Internship Experience}
+\textbf{International Institute of Digital Technologies \& Blackbuck Engineers} {\small \faCertificate     \href{https://drive.google.com/file/d/1yLU3ccZEypv8vzK_e8WPf-OR26eCQsa4/view?usp=sharing}{ View Certificate}}
+
+\begin{itemize}[topsep=1pt, itemsep=1pt]
+  \item Worked on Python-based data analysis and machine learning projects and Applied ML concepts to solve real-world problem statements
+\end{itemize}
+
+\textbf{CodingMissions IT Solutions} {\small \faCertificate \href{https://drive.google.com/file/d/1d79ofNkClkTFujKh6tykvocbHIrbp_-_/view?usp=sharing}{View Certificate}}
+\begin{itemize}[topsep=1pt, itemsep=1pt]
+\item Developed Python programs for automation and data processing
+\end{itemize}
+
+%==================== PROJECTS ====================
+\section*{Key Projects}
+\textbf{Smart India Hackathon 2025 Website Replication}  {\small \faGithub\ \href{https://github.com/ASHARISH1805/Smart-RCE-Hackathon-2026-Website.git}{Source Code}  
+\faGlobe\ \href{https://smart-rce-hackathon-2026-website.onrender.com/}{Live Demo}}  
+
+Full-stack replica of SIH platform with registration, team management, and admin workflows.  
+
+\textit{Tech: HTML, CSS, JavaScript, Flask, MySQL}
+
+\vspace{1mm}
+
+\textbf{Dynamic Portfolio Engine with Custom CMS}  {\small \faGithub\
+\href{https://github.com/harishas1805/harishas-portfolio.git}{Source Code} \faGlobe\
+\href{https://harishas-portfolio.onrender.com/}{Live Demo}}  
+
+Built a Node.js-based portfolio with CMS enabling instant updates without code changes.  
+
+\textit{Tech: Node.js, PostgreSQL}
+\vspace{1mm}
+
+\textbf{AutoFolio – AI Resume to Portfolio Platform}  {\small \faGithub\ \href{https://github.com/ASHARISH1805/autofolio-saas.git}{Source Code} \faGlobe\ 
+\href{https://autofolio-saas.onrender.com/}{Live Demo}}  
+
+LLM-powered system to extract structured data from resumes and auto-generate portfolios.  
+
+\textit{Tech: \textit{LaTeX, Overleaf, CSS Grid, HTML, PDF Generation} Node.js, Gemini API}
+\vspace{1mm}
+
+\textbf{Interactive Qlik Dashboard for DataCo Supply Chain Analytics} {\small \faGithub\   
+\href{https://github.com/ASHARISH1805/interactive-dashboard-supplychain.git}{Source Code} \faGlobe\
+\href{https://interactive-dashboard-supplychain.onrender.com/}{Live Demo}}  
+
+Designed dashboards to analyze supply chain performance and operational KPIs.  
+
+\textit{Tech: Qlik Sense, Data Analytics, OAuth 2.0, HTML/CSS Mashup, Qlik Cloud}
+\vspace{1mm}
+
+\textbf{Forecasting Future Water Requirements and Reservoir Storage}  {\small \faGithub\
+\href{https://github.com/ASHARISH1805/water-demand-forecast.git}{Source Code} 
+\faGlobe\
+\href{https://water-demand-forecast-waal.onrender.com/}{Live Demo}}  
+
+ML-based system using time-series forecasting and regression models with interactive Flask dashboard.  
+
+\textit{Tech: Python, ML, Flask}
+\vspace{1mm}
+
+\textbf{Job Board Aggregator with Automated Web Scraping}
+
+Built a system to collect, filter, and present job listings from multiple sources with keyword-based search.  
+
+\textit{Tech: Python, Web Scraping, APIs}
+
+%==================== CERTIFICATIONS ====================
+\section*{Certifications}
+\begin{itemize}[noitemsep]
+\item AI/ML \& Geodata Analysis – ISRO (2024) {\small \faCertificate  \href{https://drive.google.com/file/d/1hOObge3QEoZgAhgcy7lgm8dsfksrYvPP/view?usp=sharing}{View Certificate}}  
+\item Remote Sensing \& Digital Image Analysis – ISRO-IIRS (2024) {\small \faCertificate \href{https://drive.google.com/file/d/18UuUo8uB8JgDgEWNUGXtoe_Mt_dEjp4D/view?usp=sharing}{View Certificate}}  
+\item Quantum Fundamentals – IBM Quantum (2025)
+\item Quantum Hardware Technologies – QuEdX TalkOn (2026) 
+\item C Programming – UC Santa Cruz (2023) {\small \faCertificate 
+\href{https://drive.google.com/file/d/12ZuDUSr54HbCkFfaiVcGuPTUFAMIVL-t/view?usp=sharing}{View Certificate}} 
+\end{itemize}
+
+%==================== ACHIEVEMENTS ====================
+\section*{Achievements \& Hackathons}
+\begin{itemize}[noitemsep]
+\item \textbf{Smart India Hackathon 2024 – Grand Finale Finalist}  
+{\small 
+\href{https://drive.google.com/file/d/1A6k7FENM2_CCrsDbuoLorV6HwiB5tisS/view?usp=sharing}{View Certificate}}
+
+Forecasting future water requirements and assessing storage capacities in reservoirs.
+\vspace{2mm}
+\item \textbf{MIT iQuHACK 2026 (Remote) – Selected Participant}  
+Worked on quantum computing challenges focusing on quantum algorithms and hybrid quantum--AI approaches.
+\vspace{2mm}
+\item \textbf{MSME IDEA Hackathon 2024 – Participant}  
+
+Developed innovative solution concepts addressing real-world challenges in the MSME sector.
+\vspace{2mm}
+
+\item \textbf{AI Impact Summit 2026} (16--20 February 2026) -- Participant \\
+  Engaged in applied AI innovation, industry-focused use cases, and AI-driven problem solving.
+\end{itemize}
+
 \end{document}
